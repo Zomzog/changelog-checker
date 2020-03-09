@@ -1,0 +1,9 @@
+name: 'Changelog checker'
+description: 'Verify the changelog has been updated'
+author: 'Zomzog@gmail.com'
+branding:
+  icon: 'bell'
+  color: 'yellow'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
