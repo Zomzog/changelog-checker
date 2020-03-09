@@ -25,8 +25,8 @@
   "author": "YourNameOrOrganization",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.0",
-    "@actions/github": "^2.0.1"
+    "@actions/core": "^1.2.3",
+    "@actions/github": "^2.1.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
