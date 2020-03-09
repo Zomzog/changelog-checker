@@ -2049,7 +2049,7 @@ function checkChangelogExist(octokit, actionContext, prNumber, config) {
     return __awaiter(this, void 0, void 0, function* () {
         const changlelogFiles = yield prService_1.findFile(octokit, actionContext, prNumber, config);
         if (!changlelogFiles) {
-            core.setFailed('Missing changelog file');
+            core.setFailed(`Missing changelog ${config.fileName}`);
         }
     });
 }
