@@ -1,6 +1,13 @@
 === 0.2.1
 
 Update readme
+=== 0.3.0
+
+Configurable changelog name
+
+=== 0.2.1
+
+Readme
 
 === 0.2.0
 

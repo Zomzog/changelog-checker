@@ -1879,14 +1879,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const github = __importStar(__webpack_require__(469));
-function githubToken() {
-    const token = process.env.GITHUB_TOKEN;
-    if (!token)
-        throw ReferenceError('Github token required, add "env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"');
-    return token;
-}
-function getOctokit() {
-    return new github.GitHub(githubToken());
+function getOctokit(config) {
+    return new github.GitHub(config.githubToken);
 }
 exports.getOctokit = getOctokit;
 
@@ -2050,31 +2044,33 @@ const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
 const octokitProvider_1 = __webpack_require__(188);
 const prService_1 = __webpack_require__(600);
-function checkChangelogExist(octokit, actionContext, prNumber) {
+const config_1 = __webpack_require__(478);
+function checkChangelogExist(octokit, actionContext, prNumber, config) {
     return __awaiter(this, void 0, void 0, function* () {
-        const changlelogFiles = yield prService_1.findFile(octokit, actionContext, prNumber);
+        const changlelogFiles = yield prService_1.findFile(octokit, actionContext, prNumber, config);
         if (!changlelogFiles) {
             core.setFailed('Missing changelog file');
         }
     });
 }
-function checkChangelog() {
+function checkChangelog(config) {
     return __awaiter(this, void 0, void 0, function* () {
         const actionContext = github.context;
-        const octokit = octokitProvider_1.getOctokit();
+        const octokit = octokitProvider_1.getOctokit(config);
         const prNumber = prService_1.getCurrentPrNumber(actionContext);
         if (!prNumber) {
             core.info('Not a PR');
         }
         else {
-            checkChangelogExist(octokit, actionContext, prNumber);
+            checkChangelogExist(octokit, actionContext, prNumber, config);
         }
     });
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield checkChangelog();
+            const config = config_1.readConfig();
+            yield checkChangelog(config);
         }
         catch (error) {
             core.setFailed(error.message);
@@ -7383,6 +7379,49 @@ function authenticationBeforeRequest(state, options) {
 
 /***/ }),
 
+/***/ 478:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core = __importStar(__webpack_require__(470));
+class Config {
+    constructor(githubToken, fileName) {
+        this.githubToken = githubToken;
+        this.fileName = fileName;
+    }
+}
+exports.Config = Config;
+function readConfig() {
+    const token = readGithubToken();
+    const name = readFileName();
+    return new Config(token, name);
+}
+exports.readConfig = readConfig;
+function readGithubToken() {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token)
+        throw ReferenceError('Github token required, add "env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"');
+    return token;
+}
+function readFileName() {
+    const fileName = core.getInput('fileName');
+    if (!fileName)
+        throw ReferenceError('Changelog fileName required"');
+    return fileName;
+}
+
+
+/***/ }),
+
 /***/ 489:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -8389,9 +8428,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function findFile(octokit, actionContext, prNumber) {
+function findFile(octokit, actionContext, prNumber, config) {
     return __awaiter(this, void 0, void 0, function* () {
-        const regex = new RegExp('CHANGELOG.adoc');
+        const regex = new RegExp(config.fileName);
         const files = yield octokit.pulls.listFiles(Object.assign(Object.assign({}, actionContext.repo), { pull_number: prNumber // eslint-disable-line @typescript-eslint/camelcase
          }));
         return files.data.find(value => regex.test(value.filename));

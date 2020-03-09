@@ -4,6 +4,10 @@ author: 'Zomzog@gmail.com'
 branding:
   icon: 'bell'
   color: 'yellow'
+inputs:
+  fileName:
+    description: 'Changelog fileName'
+    default: 'CHANGELOG.adoc'
 runs:
   using: 'node12'
   main: 'dist/index.js'
