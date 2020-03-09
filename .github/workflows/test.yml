@@ -19,5 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: ./
+      with:
+        fileName: MLP.adoc
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

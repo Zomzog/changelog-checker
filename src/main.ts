@@ -18,7 +18,7 @@ async function checkChangelogExist(
     config
   )
   if (!changlelogFiles) {
-    core.setFailed('Missing changelog file')
+    core.setFailed(`Missing changelog ${config.fileName}`)
   }
 }
 
