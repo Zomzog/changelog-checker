@@ -1,0 +1,58 @@
+image:https://github.com/Zomzog/changelog-checker/workflows/build-test/badge.svg["build-test"]
+
+
+=== Usage:
+
+[code, yaml]
+----
+name: MyLittleWorkflow
+on: push
+jobs:
+  build:
+    name: Check Actions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Changelog check
+        uses: Zomzog/changelog-checker@v0.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+----
+
+=== Develop
+
+Install the dependencies  
+[code, bash]
+----
+$ npm install
+----
+
+Build the typescript and package it for distribution
+[code, bash]
+----
+$ npm run build && npm run pack
+----
+
+Run the tests :heavy_check_mark:  
+[code, bash]
+----
+$ npm test
+----
+
+=== Publish to a distribution branch
+
+Actions are run from GitHub repos so we will checkin the packed dist folder. 
+
+Then run [ncc](https://github.com/zeit/ncc) and push the results:
+[code, bash]
+----
+$ npm run pack
+$ git add dist
+$ git commit -a -m "prod dependencies"
+$ git push origin releases/v1
+----
+
+Your action is now published! :rocket: 
+
+See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
+
