@@ -1,6 +1,7 @@
-=== 0.2.1
+=== 0.4.0
 
-Update readme
+Upgrade dependencies
+
 === 0.3.0
 
 Configurable changelog name
