@@ -1865,6 +1865,34 @@ module.exports = opts => {
 
 /***/ }),
 
+/***/ 188:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const github = __importStar(__webpack_require__(469));
+function githubToken() {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token)
+        throw ReferenceError('Github token required, add "env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"');
+    return token;
+}
+function getOctokit() {
+    return new github.GitHub(githubToken());
+}
+exports.getOctokit = getOctokit;
+
+
+/***/ }),
+
 /***/ 190:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -2020,25 +2048,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
-function githubToken() {
-    const token = process.env.GITHUB_TOKEN;
-    if (!token)
-        throw ReferenceError('No token defined in the environment variables');
-    return token;
-}
-function getPr(actionContext) {
-    const pr = actionContext.payload.pull_request;
-    if (!pr)
-        throw ReferenceError('Not a PR');
-    return pr;
-}
+const octokitProvider_1 = __webpack_require__(188);
+const prService_1 = __webpack_require__(600);
 function checkChangelogExist(octokit, actionContext, prNumber) {
     return __awaiter(this, void 0, void 0, function* () {
-        const regex = new RegExp('CHANGELOG.adoc');
-        const files = yield octokit.pulls.listFiles(Object.assign(Object.assign({}, actionContext.repo), { pull_number: prNumber // eslint-disable-line @typescript-eslint/camelcase
-         }));
-        const changlelogFiles = files.data.filter(value => regex.test(value.filename));
-        if (changlelogFiles.length === 0) {
+        const changlelogFiles = yield prService_1.findFile(octokit, actionContext, prNumber);
+        if (!changlelogFiles) {
             core.setFailed('Missing changelog file');
         }
     });
@@ -2046,9 +2061,14 @@ function checkChangelogExist(octokit, actionContext, prNumber) {
 function checkChangelog() {
     return __awaiter(this, void 0, void 0, function* () {
         const actionContext = github.context;
-        const octokit = new github.GitHub(githubToken());
-        const pr = getPr(actionContext);
-        checkChangelogExist(octokit, actionContext, pr.number);
+        const octokit = octokitProvider_1.getOctokit();
+        const prNumber = prService_1.getCurrentPrNumber(actionContext);
+        if (!prNumber) {
+            core.info('Not a PR');
+        }
+        else {
+            checkChangelogExist(octokit, actionContext, prNumber);
+        }
     });
 }
 function run() {
@@ -8350,6 +8370,41 @@ function getPageLinks (link) {
 
   return links
 }
+
+
+/***/ }),
+
+/***/ 600:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+function findFile(octokit, actionContext, prNumber) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const regex = new RegExp('CHANGELOG.adoc');
+        const files = yield octokit.pulls.listFiles(Object.assign(Object.assign({}, actionContext.repo), { pull_number: prNumber // eslint-disable-line @typescript-eslint/camelcase
+         }));
+        return files.data.find(value => regex.test(value.filename));
+    });
+}
+exports.findFile = findFile;
+function getCurrentPrNumber(actionContext) {
+    const pr = actionContext.payload.pull_request;
+    if (pr) {
+        return pr.number;
+    }
+}
+exports.getCurrentPrNumber = getCurrentPrNumber;
 
 
 /***/ }),
