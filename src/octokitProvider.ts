@@ -1,14 +1,6 @@
 import * as github from '@actions/github'
+import {Config} from './config'
 
-function githubToken(): string {
-  const token = process.env.GITHUB_TOKEN
-  if (!token)
-    throw ReferenceError(
-      'Github token required, add "env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"'
-    )
-  return token
-}
-
-export function getOctokit(): github.GitHub {
-  return new github.GitHub(githubToken())
+export function getOctokit(config: Config): github.GitHub {
+  return new github.GitHub(config.githubToken)
 }
