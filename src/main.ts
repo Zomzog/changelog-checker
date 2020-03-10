@@ -27,10 +27,10 @@ async function checkChangelog(config: Config): Promise<void> {
 
   const octokit = getOctokit(config)
   const prNumber = getCurrentPrNumber(actionContext)
-  if (!prNumber) {
-    core.info('Not a PR')
-  } else {
+  if (prNumber) {
     checkChangelogExist(octokit, actionContext, prNumber, config)
+  } else {
+    core.info('Not a PR')
   }
 }
 
