@@ -1,3 +1,7 @@
+=== 0.5.0
+
+Fix not a PR error
+
 === 0.4.0
 
 Upgrade dependencies
