@@ -7,7 +7,11 @@ image:https://snyk.io/test/github/Zomzog/changelog-checker/badge.svg?targetFile=
 [code, yaml]
 ----
 name: MyLittleWorkflow
-on: push
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
 jobs:
   build:
     name: Check Actions
