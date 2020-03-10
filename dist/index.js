@@ -2049,7 +2049,8 @@ function checkChangelogExist(octokit, actionContext, prNumber, config) {
     return __awaiter(this, void 0, void 0, function* () {
         const changlelogFiles = yield prService_1.findFile(octokit, actionContext, prNumber, config);
         if (!changlelogFiles) {
-            core.setFailed(`Missing changelog ${config.fileName}`);
+            core.setFailed(`${config.fileName} must be updated`);
+            core.setOutput;
         }
     });
 }
@@ -2058,11 +2059,11 @@ function checkChangelog(config) {
         const actionContext = github.context;
         const octokit = octokitProvider_1.getOctokit(config);
         const prNumber = prService_1.getCurrentPrNumber(actionContext);
-        if (!prNumber) {
-            core.info('Not a PR');
+        if (prNumber) {
+            checkChangelogExist(octokit, actionContext, prNumber, config);
         }
         else {
-            checkChangelogExist(octokit, actionContext, prNumber, config);
+            core.info('Not a PR');
         }
     });
 }
