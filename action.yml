@@ -8,6 +8,9 @@ inputs:
   fileName:
     description: 'Changelog fileName'
     default: 'CHANGELOG.adoc'
+  noChangelogLabel:
+    description: 'Label to ignore changelog check'
+    default: 'no changelog'
 runs:
   using: 'node12'
   main: 'dist/index.js'

@@ -2050,7 +2050,6 @@ function checkChangelogExist(octokit, actionContext, prNumber, config) {
         const changlelogFiles = yield prService_1.findFile(octokit, actionContext, prNumber, config);
         if (!changlelogFiles) {
             core.setFailed(`${config.fileName} must be updated`);
-            core.setOutput;
         }
     });
 }
@@ -2058,12 +2057,18 @@ function checkChangelog(config) {
     return __awaiter(this, void 0, void 0, function* () {
         const actionContext = github.context;
         const octokit = octokitProvider_1.getOctokit(config);
-        const prNumber = prService_1.getCurrentPrNumber(actionContext);
-        if (prNumber) {
-            checkChangelogExist(octokit, actionContext, prNumber, config);
+        const labels = yield prService_1.getCurrentPrLabels(actionContext);
+        if (labels.includes(config.noChangelogLabel)) {
+            core.info(`Ignore chagelog by label ${config.noChangelogLabel}`);
         }
         else {
-            core.info('Not a PR');
+            const prNumber = prService_1.getCurrentPrNumber(actionContext);
+            if (prNumber) {
+                checkChangelogExist(octokit, actionContext, prNumber, config);
+            }
+            else {
+                core.info('Not a PR');
+            }
         }
     });
 }
@@ -7395,16 +7400,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 class Config {
-    constructor(githubToken, fileName) {
+    constructor(githubToken, fileName, noChangelogLabel) {
         this.githubToken = githubToken;
         this.fileName = fileName;
+        this.noChangelogLabel = noChangelogLabel;
     }
 }
 exports.Config = Config;
 function readConfig() {
     const token = readGithubToken();
     const name = readFileName();
-    return new Config(token, name);
+    const noChangelogLabel = readNoChangelogLabel();
+    return new Config(token, name, noChangelogLabel);
 }
 exports.readConfig = readConfig;
 function readGithubToken() {
@@ -7418,6 +7425,12 @@ function readFileName() {
     if (!fileName)
         throw ReferenceError('Changelog fileName required"');
     return fileName;
+}
+function readNoChangelogLabel() {
+    const label = core.getInput('noChangelogLabel');
+    if (!label)
+        throw ReferenceError('Changelog label required"');
+    return label;
 }
 
 
@@ -8382,6 +8395,18 @@ function findFile(octokit, actionContext, prNumber, config) {
     });
 }
 exports.findFile = findFile;
+function getCurrentPrLabels(actionContext) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const pr = actionContext.payload.pull_request;
+        if (pr) {
+            return Promise.all(pr.labels.map((it) => __awaiter(this, void 0, void 0, function* () { return it.name; }))); // eslint-disable-line @typescript-eslint/no-explicit-any
+        }
+        else {
+            return [];
+        }
+    });
+}
+exports.getCurrentPrLabels = getCurrentPrLabels;
 function getCurrentPrNumber(actionContext) {
     const pr = actionContext.payload.pull_request;
     if (pr) {

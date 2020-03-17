@@ -8,6 +8,7 @@ image:https://snyk.io/test/github/Zomzog/changelog-checker/badge.svg?targetFile=
 ----
 name: MyLittleWorkflow
 on:
+  label:
   pull_request:
     branches:
       - master
@@ -21,7 +22,8 @@ jobs:
       - name: Changelog check
         uses: Zomzog/changelog-checker@v0.2.0
         with:
-          fileName: myChangelog.adoc
+          fileName: myChangelog.adoc # default `CHANGELOG.adoc`
+          noChangelogLabel: my custom label # default `no changelog`
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ----
