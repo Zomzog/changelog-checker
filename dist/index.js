@@ -2062,7 +2062,6 @@ function checkChangelog(config) {
             core.info(`Ignore chagelog by label ${config.noChangelogLabel}`);
         }
         else {
-            's';
             const prNumber = prService_1.getCurrentPrNumber(actionContext);
             if (prNumber) {
                 checkChangelogExist(octokit, actionContext, prNumber, config);

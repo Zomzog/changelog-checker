@@ -29,7 +29,7 @@ async function checkChangelog(config: Config): Promise<void> {
   const labels = getCurrentPrLabels(actionContext)
   if (labels.includes(config.noChangelogLabel)) {
     core.info(`Ignore chagelog by label ${config.noChangelogLabel}`)
-  } else {'s'
+  } else {
     const prNumber = getCurrentPrNumber(actionContext)
     if (prNumber) {
       checkChangelogExist(octokit, actionContext, prNumber, config)

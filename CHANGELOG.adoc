@@ -1,3 +1,7 @@
+=== 0.6.0
+
+Add ignore on label feature
+
 === 0.5.0
 
 Update error message and doc

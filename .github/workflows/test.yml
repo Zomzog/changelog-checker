@@ -20,7 +20,5 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: ./
-      with:
-        noChangelogLabel: good first issue
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
