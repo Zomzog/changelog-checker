@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {Context} from '@actions/github/lib/context'
 import {getOctokit} from './octokitProvider'
-import {findFile, getCurrentPrNumber, getPrLabels} from './prService'
+import {findFile, getCurrentPrNumber, getCurrentPrLabels} from './prService'
 import {Config, readConfig} from './config'
 
 async function checkChangelogExist(
@@ -26,7 +26,7 @@ async function checkChangelog(config: Config): Promise<void> {
   const actionContext = github.context
 
   const octokit = getOctokit(config)
-  const prBody = getPrLabels(actionContext)
+  const prBody = getCurrentPrLabels(actionContext)
   if (prBody) {
     core.info(JSON.stringify(prBody))
   }
