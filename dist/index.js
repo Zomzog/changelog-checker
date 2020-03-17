@@ -2061,12 +2061,15 @@ function checkChangelog(config) {
         if (labels.includes(config.noChangelogLabel)) {
             core.info('Ignore chagelog by label');
         }
-        const prNumber = prService_1.getCurrentPrNumber(actionContext);
-        if (prNumber) {
-            checkChangelogExist(octokit, actionContext, prNumber, config);
-        }
         else {
-            core.info('Not a PR');
+            's';
+            const prNumber = prService_1.getCurrentPrNumber(actionContext);
+            if (prNumber) {
+                checkChangelogExist(octokit, actionContext, prNumber, config);
+            }
+            else {
+                core.info('Not a PR');
+            }
         }
     });
 }

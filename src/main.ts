@@ -1,9 +1,9 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {Context} from '@actions/github/lib/context'
-import {getOctokit} from './octokitProvider'
-import {findFile, getCurrentPrNumber, getCurrentPrLabels} from './prService'
-import {Config, readConfig} from './config'
+import { Context } from '@actions/github/lib/context'
+import { getOctokit } from './octokitProvider'
+import { findFile, getCurrentPrNumber, getCurrentPrLabels } from './prService'
+import { Config, readConfig } from './config'
 
 async function checkChangelogExist(
   octokit: github.GitHub,
@@ -29,12 +29,13 @@ async function checkChangelog(config: Config): Promise<void> {
   const labels = getCurrentPrLabels(actionContext)
   if (labels.includes(config.noChangelogLabel)) {
     core.info('Ignore chagelog by label')
-  }
-  const prNumber = getCurrentPrNumber(actionContext)
-  if (prNumber) {
-    checkChangelogExist(octokit, actionContext, prNumber, config)
-  } else {
-    core.info('Not a PR')
+  } else {'s'
+    const prNumber = getCurrentPrNumber(actionContext)
+    if (prNumber) {
+      checkChangelogExist(octokit, actionContext, prNumber, config)
+    } else {
+      core.info('Not a PR')
+    }
   }
 }
 
