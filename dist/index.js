@@ -2059,7 +2059,7 @@ function checkChangelog(config) {
         const octokit = octokitProvider_1.getOctokit(config);
         const labels = prService_1.getCurrentPrLabels(actionContext);
         if (labels.includes(config.noChangelogLabel)) {
-            core.info('Ignore chagelog by label ${config.noChangelogLabel}');
+            core.info(`Ignore chagelog by label ${config.noChangelogLabel}`);
         }
         else {
             's';
