@@ -8,7 +8,7 @@ inputs:
   fileName:
     description: 'Changelog fileName'
     default: 'CHANGELOG.adoc'
-  noChangelogLabel':
+  noChangelogLabel:
     description: 'Label to ignore changelog check'
     default: 'no changelog'
 runs:
