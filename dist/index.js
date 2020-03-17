@@ -2050,7 +2050,6 @@ function checkChangelogExist(octokit, actionContext, prNumber, config) {
         const changlelogFiles = yield prService_1.findFile(octokit, actionContext, prNumber, config);
         if (!changlelogFiles) {
             core.setFailed(`${config.fileName} must be updated`);
-            core.setOutput;
         }
     });
 }
@@ -2058,6 +2057,10 @@ function checkChangelog(config) {
     return __awaiter(this, void 0, void 0, function* () {
         const actionContext = github.context;
         const octokit = octokitProvider_1.getOctokit(config);
+        const prBody = prService_1.getPrLabels(actionContext);
+        if (prBody) {
+            core.info(prBody);
+        }
         const prNumber = prService_1.getCurrentPrNumber(actionContext);
         if (prNumber) {
             checkChangelogExist(octokit, actionContext, prNumber, config);
@@ -8382,6 +8385,11 @@ function findFile(octokit, actionContext, prNumber, config) {
     });
 }
 exports.findFile = findFile;
+function getPrLabels(actionContext) {
+    const pr = actionContext.payload.pull_request;
+    return pr;
+}
+exports.getPrLabels = getPrLabels;
 function getCurrentPrNumber(actionContext) {
     const pr = actionContext.payload.pull_request;
     if (pr) {
