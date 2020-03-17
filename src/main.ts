@@ -1,9 +1,9 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { Context } from '@actions/github/lib/context'
-import { getOctokit } from './octokitProvider'
-import { findFile, getCurrentPrNumber, getCurrentPrLabels } from './prService'
-import { Config, readConfig } from './config'
+import {Context} from '@actions/github/lib/context'
+import {getOctokit} from './octokitProvider'
+import {findFile, getCurrentPrNumber, getCurrentPrLabels} from './prService'
+import {Config, readConfig} from './config'
 
 async function checkChangelogExist(
   octokit: github.GitHub,
@@ -26,7 +26,7 @@ async function checkChangelog(config: Config): Promise<void> {
   const actionContext = github.context
 
   const octokit = getOctokit(config)
-  const labels = getCurrentPrLabels(actionContext)
+  const labels = await getCurrentPrLabels(actionContext)
   if (labels.includes(config.noChangelogLabel)) {
     core.info(`Ignore chagelog by label ${config.noChangelogLabel}`)
   } else {

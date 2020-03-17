@@ -2057,7 +2057,7 @@ function checkChangelog(config) {
     return __awaiter(this, void 0, void 0, function* () {
         const actionContext = github.context;
         const octokit = octokitProvider_1.getOctokit(config);
-        const labels = prService_1.getCurrentPrLabels(actionContext);
+        const labels = yield prService_1.getCurrentPrLabels(actionContext);
         if (labels.includes(config.noChangelogLabel)) {
             core.info(`Ignore chagelog by label ${config.noChangelogLabel}`);
         }
@@ -8396,13 +8396,15 @@ function findFile(octokit, actionContext, prNumber, config) {
 }
 exports.findFile = findFile;
 function getCurrentPrLabels(actionContext) {
-    const pr = actionContext.payload.pull_request;
-    if (pr) {
-        return pr.labels.map((it) => it.name);
-    }
-    else {
-        return [];
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        const pr = actionContext.payload.pull_request;
+        if (pr) {
+            return Promise.all(pr.labels.map((it) => __awaiter(this, void 0, void 0, function* () { return it.name; }))); // eslint-disable-line @typescript-eslint/no-explicit-any
+        }
+        else {
+            return [];
+        }
+    });
 }
 exports.getCurrentPrLabels = getCurrentPrLabels;
 function getCurrentPrNumber(actionContext) {

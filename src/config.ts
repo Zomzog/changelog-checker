@@ -33,7 +33,6 @@ function readFileName(): string {
   return fileName
 }
 
-
 function readNoChangelogLabel(): string {
   const label = core.getInput('noChangelogLabel')
   if (!label) throw ReferenceError('Changelog label required"')
