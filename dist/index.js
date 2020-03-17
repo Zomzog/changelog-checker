@@ -2057,9 +2057,9 @@ function checkChangelog(config) {
     return __awaiter(this, void 0, void 0, function* () {
         const actionContext = github.context;
         const octokit = octokitProvider_1.getOctokit(config);
-        const prBody = prService_1.getCurrentPrLabels(actionContext);
-        if (prBody) {
-            core.info(JSON.stringify(prBody));
+        const labels = prService_1.getCurrentPrLabels(actionContext);
+        if (labels.includes(config.noChangelogLabel)) {
+            core.info('Ignore chagelog by label');
         }
         const prNumber = prService_1.getCurrentPrNumber(actionContext);
         if (prNumber) {
@@ -7398,16 +7398,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 class Config {
-    constructor(githubToken, fileName) {
+    constructor(githubToken, fileName, noChangelogLabel) {
         this.githubToken = githubToken;
         this.fileName = fileName;
+        this.noChangelogLabel = noChangelogLabel;
     }
 }
 exports.Config = Config;
 function readConfig() {
     const token = readGithubToken();
     const name = readFileName();
-    return new Config(token, name);
+    const noChangelogLabel = readNoChangelogLabel();
+    return new Config(token, name, noChangelogLabel);
 }
 exports.readConfig = readConfig;
 function readGithubToken() {
@@ -7421,6 +7423,15 @@ function readFileName() {
     if (!fileName)
         throw ReferenceError('Changelog fileName required"');
     return fileName;
+}
+function readNoChangelogLabel() {
+    const label = core.getInput('noChangelogLabel');
+    if (!label) {
+        return 'no changelog';
+    }
+    else {
+        return label;
+    }
 }
 
 
@@ -8387,7 +8398,12 @@ function findFile(octokit, actionContext, prNumber, config) {
 exports.findFile = findFile;
 function getCurrentPrLabels(actionContext) {
     const pr = actionContext.payload.pull_request;
-    return pr === null || pr === void 0 ? void 0 : pr.labels;
+    if (pr) {
+        return pr.labels.map((it) => it.name);
+    }
+    else {
+        return [];
+    }
 }
 exports.getCurrentPrLabels = getCurrentPrLabels;
 function getCurrentPrNumber(actionContext) {

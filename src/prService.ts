@@ -17,9 +17,13 @@ export async function findFile(
   return files.data.find(value => regex.test(value.filename))
 }
 
-export function getCurrentPrLabels(actionContext: Context): any {
+export function getCurrentPrLabels(actionContext: Context): string[] {
   const pr = actionContext.payload.pull_request
-  return pr?.labels
+  if (pr) {
+    return pr.labels.map((it:any) => it.name)
+  } else {
+    return []
+  }
 }
 
 export function getCurrentPrNumber(actionContext: Context): number | undefined {

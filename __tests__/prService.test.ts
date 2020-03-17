@@ -19,9 +19,16 @@ test('get current labels', async () => {
   const context = new Context() 
   context.payload = 
   {
-    pull_request: PR
+    pull_request: {
+      number: 7,
+      labels: [{
+        name: "good first issue"
+      },{
+        name: "no changelog"
+      }]
+    }
   }
 
   const prNumber = getCurrentPrLabels(context)
-  //expect(prNumber).toBe(['label1', 'label_2'])
+  expect(prNumber).toEqual(expect.arrayContaining(['good first issue', 'no changelog']))
 })
