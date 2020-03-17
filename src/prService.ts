@@ -17,9 +17,9 @@ export async function findFile(
   return files.data.find(value => regex.test(value.filename))
 }
 
-export function getPrLabels(actionContext: Context): string | undefined {
+export function getPrLabels(actionContext: Context): any {
   const pr = actionContext.payload.pull_request
-  return pr?.body
+  return pr
 }
 
 export function getCurrentPrNumber(actionContext: Context): number | undefined {
