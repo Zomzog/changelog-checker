@@ -28,7 +28,7 @@ async function checkChangelog(config: Config): Promise<void> {
   const octokit = getOctokit(config)
   const prBody = getPrLabels(actionContext)
   if (prBody) {
-    core.info(prBody)
+    core.info(JSON.stringify(prBody))
   }
   const prNumber = getCurrentPrNumber(actionContext)
   if (prNumber) {

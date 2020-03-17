@@ -2059,7 +2059,7 @@ function checkChangelog(config) {
         const octokit = octokitProvider_1.getOctokit(config);
         const prBody = prService_1.getPrLabels(actionContext);
         if (prBody) {
-            core.info(prBody);
+            core.info(JSON.stringify(prBody));
         }
         const prNumber = prService_1.getCurrentPrNumber(actionContext);
         if (prNumber) {
