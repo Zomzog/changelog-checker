@@ -2057,7 +2057,7 @@ function checkChangelog(config) {
     return __awaiter(this, void 0, void 0, function* () {
         const actionContext = github.context;
         const octokit = octokitProvider_1.getOctokit(config);
-        const prBody = prService_1.getPrLabels(actionContext);
+        const prBody = prService_1.getCurrentPrLabels(actionContext);
         if (prBody) {
             core.info(JSON.stringify(prBody));
         }
@@ -8385,11 +8385,11 @@ function findFile(octokit, actionContext, prNumber, config) {
     });
 }
 exports.findFile = findFile;
-function getPrLabels(actionContext) {
+function getCurrentPrLabels(actionContext) {
     const pr = actionContext.payload.pull_request;
-    return pr;
+    return pr === null || pr === void 0 ? void 0 : pr.labels;
 }
-exports.getPrLabels = getPrLabels;
+exports.getCurrentPrLabels = getCurrentPrLabels;
 function getCurrentPrNumber(actionContext) {
     const pr = actionContext.payload.pull_request;
     if (pr) {

@@ -1,4 +1,4 @@
-import { PR } from "./data";
+import { PR } from "./data.test";
 import { getCurrentPrNumber, getCurrentPrLabels } from "../src/prService";
 import {Context} from '@actions/github/lib/context'
 
