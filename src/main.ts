@@ -28,7 +28,7 @@ async function checkChangelog(config: Config): Promise<void> {
   const octokit = getOctokit(config)
   const labels = getCurrentPrLabels(actionContext)
   if (labels.includes(config.noChangelogLabel)) {
-    core.info('Ignore chagelog by label')
+    core.info('Ignore chagelog by label ${config.noChangelogLabel}')
   } else {'s'
     const prNumber = getCurrentPrNumber(actionContext)
     if (prNumber) {
