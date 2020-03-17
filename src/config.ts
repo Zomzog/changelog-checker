@@ -36,9 +36,6 @@ function readFileName(): string {
 
 function readNoChangelogLabel(): string {
   const label = core.getInput('noChangelogLabel')
-  if (!label) {
-    return 'no changelog'
-  } else {
-    return label
-  }
+  if (!label) throw ReferenceError('Changelog label required"')
+  return label
 }
