@@ -1897,12 +1897,18 @@ function createStatus(octokit, pullRequest, conclusion) {
     return __awaiter(this, void 0, void 0, function* () {
         const { owner, repo } = github.context.repo;
         const headSha = pullRequest.head.sha;
+        const output = {
+            title: 'Changelog check title',
+            summary: 'the summary',
+            text: 'the text'
+        };
         const status = {
             owner,
             repo,
             conclusion,
             head_sha: headSha,
-            name: 'Changelog check'
+            name: 'Changelog check',
+            output
         };
         const check = yield octokit.checks.create(status);
         core.info(JSON.stringify(check));

@@ -15,13 +15,19 @@ export async function createStatus(
 ): Promise<void> {
   const {owner, repo} = github.context.repo
   const headSha = pullRequest.head.sha
+  const output: Octokit.ChecksCreateParamsOutput = {
+    title: 'Changelog check title',
+    summary: 'the summary',
+    text: 'the text'
+  }
 
   const status: Octokit.ChecksCreateParams = {
     owner,
     repo,
     conclusion,
     head_sha: headSha, // eslint-disable-line @typescript-eslint/camelcase
-    name: 'Changelog check'
+    name: 'Changelog check',
+    output
   }
 
   const check = await octokit.checks.create(status)
