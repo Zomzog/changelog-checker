@@ -1,8 +1,8 @@
 import {PR} from './data.test'
-import {getCurrentPrNumber, getCurrentPrLabels} from '../src/prService'
+import {getPr, getCurrentPrLabels} from '../src/prService'
 import {Context} from '@actions/github/lib/context'
 
-test('get current pr number', async () => {
+test('get current pr', async () => {
   const context = new Context()
   context.payload = {
     pull_request: {
@@ -10,8 +10,8 @@ test('get current pr number', async () => {
     }
   }
 
-  const prNumber = getCurrentPrNumber(context)
-  expect(prNumber).toBe(7)
+  const pr = getPr(context)
+  expect(pr).toBe(context.payload.pull_request)
 })
 
 test('get current labels', async () => {

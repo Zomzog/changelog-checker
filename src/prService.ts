@@ -2,6 +2,7 @@ import * as github from '@actions/github'
 import {Context} from '@actions/github/lib/context'
 import {Octokit} from '@octokit/rest'
 import {Config} from './config'
+import {WebhookPayload} from '@actions/github/lib/interfaces'
 
 export async function findFile(
   octokit: github.GitHub,
@@ -20,17 +21,15 @@ export async function findFile(
 export async function getCurrentPrLabels(
   actionContext: Context
 ): Promise<string[]> {
-  const pr = actionContext.payload.pull_request
-  if (pr) {
-    return Promise.all(pr.labels.map(async (it: any) => it.name)) // eslint-disable-line @typescript-eslint/no-explicit-any
-  } else {
-    return []
-  }
+  const pr = getPr(actionContext)
+  return Promise.all(pr.labels.map(async (it: any) => it.name)) // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-export function getCurrentPrNumber(actionContext: Context): number | undefined {
+export function getPr(actionContext: Context): WebhookPayload {
   const pr = actionContext.payload.pull_request
   if (pr) {
-    return pr.number
+    return pr
+  } else {
+    throw new Error('Not a PR')
   }
 }

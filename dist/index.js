@@ -1870,6 +1870,15 @@ module.exports = opts => {
 
 "use strict";
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -1883,6 +1892,30 @@ function getOctokit(config) {
     return new github.GitHub(config.githubToken);
 }
 exports.getOctokit = getOctokit;
+function createStatus(octokit, pullRequest, conclusion) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { owner, repo } = github.context.repo;
+        const headSha = pullRequest.sha;
+        const status = {
+            owner,
+            repo,
+            conclusion,
+            head_sha: headSha,
+            name: 'Changelog check'
+        };
+        octokit.checks.create(status);
+    });
+}
+exports.createStatus = createStatus;
+var Conclusion;
+(function (Conclusion) {
+    Conclusion["SUCCESS"] = "success";
+    Conclusion["FAILURE"] = "failure";
+    Conclusion["NEUTRAL"] = "neutral";
+    Conclusion["CANCELLED"] = "cancelled";
+    Conclusion["TIMED_OUT"] = "timed_out";
+    Conclusion["ACTION_REQUIRED"] = "action_required";
+})(Conclusion = exports.Conclusion || (exports.Conclusion = {}));
 
 
 /***/ }),
@@ -2045,10 +2078,11 @@ const github = __importStar(__webpack_require__(469));
 const octokitProvider_1 = __webpack_require__(188);
 const prService_1 = __webpack_require__(600);
 const config_1 = __webpack_require__(478);
-function checkChangelogExist(octokit, actionContext, prNumber, config) {
+function checkChangelogExist(octokit, actionContext, pr, config) {
     return __awaiter(this, void 0, void 0, function* () {
-        const changlelogFiles = yield prService_1.findFile(octokit, actionContext, prNumber, config);
+        const changlelogFiles = yield prService_1.findFile(octokit, actionContext, pr.number, config);
         if (!changlelogFiles) {
+            octokitProvider_1.createStatus(octokit, pr, octokitProvider_1.Conclusion.FAILURE);
             core.setFailed(`${config.fileName} must be updated`);
         }
     });
@@ -2062,13 +2096,8 @@ function checkChangelog(config) {
             core.info(`Ignore chagelog by label ${config.noChangelogLabel}`);
         }
         else {
-            const prNumber = prService_1.getCurrentPrNumber(actionContext);
-            if (prNumber) {
-                checkChangelogExist(octokit, actionContext, prNumber, config);
-            }
-            else {
-                core.info('Not a PR');
-            }
+            const pr = prService_1.getPr(actionContext);
+            checkChangelogExist(octokit, actionContext, pr, config);
         }
     });
 }
@@ -8397,23 +8426,21 @@ function findFile(octokit, actionContext, prNumber, config) {
 exports.findFile = findFile;
 function getCurrentPrLabels(actionContext) {
     return __awaiter(this, void 0, void 0, function* () {
-        const pr = actionContext.payload.pull_request;
-        if (pr) {
-            return Promise.all(pr.labels.map((it) => __awaiter(this, void 0, void 0, function* () { return it.name; }))); // eslint-disable-line @typescript-eslint/no-explicit-any
-        }
-        else {
-            return [];
-        }
+        const pr = getPr(actionContext);
+        return Promise.all(pr.labels.map((it) => __awaiter(this, void 0, void 0, function* () { return it.name; }))); // eslint-disable-line @typescript-eslint/no-explicit-any
     });
 }
 exports.getCurrentPrLabels = getCurrentPrLabels;
-function getCurrentPrNumber(actionContext) {
+function getPr(actionContext) {
     const pr = actionContext.payload.pull_request;
     if (pr) {
-        return pr.number;
+        return pr;
+    }
+    else {
+        throw new Error('Not a PR');
     }
 }
-exports.getCurrentPrNumber = getCurrentPrNumber;
+exports.getPr = getPr;
 
 
 /***/ }),
