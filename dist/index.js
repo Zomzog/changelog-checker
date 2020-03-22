@@ -1896,7 +1896,7 @@ exports.getOctokit = getOctokit;
 function createStatus(octokit, pullRequest, conclusion) {
     return __awaiter(this, void 0, void 0, function* () {
         const { owner, repo } = github.context.repo;
-        const headSha = pullRequest.merge_commit_sha;
+        const headSha = pullRequest.head.sha;
         const status = {
             owner,
             repo,

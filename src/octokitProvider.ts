@@ -14,7 +14,7 @@ export async function createStatus(
   conclusion: Conclusion
 ): Promise<void> {
   const {owner, repo} = github.context.repo
-  const headSha = pullRequest.merge_commit_sha
+  const headSha = pullRequest.head.sha
 
   const status: Octokit.ChecksCreateParams = {
     owner,
