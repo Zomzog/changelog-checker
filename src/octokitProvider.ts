@@ -2,6 +2,7 @@ import * as github from '@actions/github'
 import {WebhookPayload} from '@actions/github/lib/interfaces'
 import {Octokit} from '@octokit/rest'
 import {Config} from './config'
+import * as core from '@actions/core'
 
 export function getOctokit(config: Config): github.GitHub {
   return new github.GitHub(config.githubToken)
@@ -23,7 +24,8 @@ export async function createStatus(
     name: 'Changelog check'
   }
 
-  octokit.checks.create(status)
+  const check = await octokit.checks.create(status)
+  core.info(JSON.stringify(check))
 }
 
 export enum Conclusion {

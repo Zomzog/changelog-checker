@@ -1888,6 +1888,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const github = __importStar(__webpack_require__(469));
+const core = __importStar(__webpack_require__(470));
 function getOctokit(config) {
     return new github.GitHub(config.githubToken);
 }
@@ -1903,7 +1904,8 @@ function createStatus(octokit, pullRequest, conclusion) {
             head_sha: headSha,
             name: 'Changelog check'
         };
-        octokit.checks.create(status);
+        const check = yield octokit.checks.create(status);
+        core.info(JSON.stringify(check));
     });
 }
 exports.createStatus = createStatus;
