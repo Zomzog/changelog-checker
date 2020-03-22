@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {Context} from '@actions/github/lib/context'
-import {getOctokit} from './octokitProvider'
+import {getOctokit, Conclusion, createStatus} from './octokitProvider'
 import {findFile, getCurrentPrNumber, getCurrentPrLabels} from './prService'
 import {Config, readConfig} from './config'
 
@@ -18,6 +18,7 @@ async function checkChangelogExist(
     config
   )
   if (!changlelogFiles) {
+    createStatus(octokit, Conclusion.FAILURE)
     core.setFailed(`${config.fileName} must be updated`)
   }
 }
