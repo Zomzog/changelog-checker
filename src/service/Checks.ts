@@ -1,12 +1,15 @@
 import {Status} from '../domain/Status'
-import {Config} from '../config'
+import {Properties} from '../domain/Properties'
 import {Octokit} from '@octokit/rest'
 import * as github from '@actions/github'
 import {WebhookPayload} from '@actions/github/lib/interfaces'
 import * as core from '@actions/core'
 
 export class Checks {
-  constructor(private _octokit: github.GitHub, private _config: Config) {}
+  constructor(
+    private _octokit: github.GitHub,
+    private _properties: Properties
+  ) {}
 
   async createStatus(
     pullRequest: WebhookPayload,
@@ -36,12 +39,12 @@ export class Checks {
   ): Octokit.ChecksCreateParamsOutput | undefined {
     if (Status.NO_CHANGELOG_UPDATE === status) {
       return {
-        title: `${this._config.fileName} must be updated`,
+        title: `${this._properties.fileName} must be updated`,
         summary: 'the summary'
       }
     } else if (Status.SKIP_BY_LABEL) {
       return {
-        title: `Ignore chagelog by label ${this._config.noChangelogLabel}`,
+        title: `Ignore chagelog by label ${this._properties.noChangelogLabel}`,
         summary: 'the summary'
       }
     }
@@ -50,7 +53,7 @@ export class Checks {
   private getConclusion(status: Status): Conclusion {
     if (Status.OK === status) {
       return Conclusion.SUCCESS
-    } else if (Status.SKIP_BY_LABEL) {
+    } else if (Status.SKIP_BY_LABEL === status) {
       return Conclusion.NEUTRAL
     }
     return Conclusion.FAILURE

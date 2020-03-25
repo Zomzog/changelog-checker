@@ -492,6 +492,24 @@ module.exports = require("os");
 
 /***/ }),
 
+/***/ 100:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class Properties {
+    constructor(githubToken, fileName, noChangelogLabel) {
+        this.githubToken = githubToken;
+        this.fileName = fileName;
+        this.noChangelogLabel = noChangelogLabel;
+    }
+}
+exports.Properties = Properties;
+
+
+/***/ }),
+
 /***/ 110:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -518,9 +536,9 @@ const Status_1 = __webpack_require__(249);
 const github = __importStar(__webpack_require__(469));
 const core = __importStar(__webpack_require__(470));
 class Checks {
-    constructor(_octokit, _config) {
+    constructor(_octokit, _properties) {
         this._octokit = _octokit;
-        this._config = _config;
+        this._properties = _properties;
     }
     createStatus(pullRequest, status) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -543,13 +561,13 @@ class Checks {
     getOutput(status) {
         if (Status_1.Status.NO_CHANGELOG_UPDATE === status) {
             return {
-                title: `${this._config.fileName} must be updated`,
+                title: `${this._properties.fileName} must be updated`,
                 summary: 'the summary'
             };
         }
         else if (Status_1.Status.SKIP_BY_LABEL) {
             return {
-                title: `Ignore chagelog by label ${this._config.noChangelogLabel}`,
+                title: `Ignore chagelog by label ${this._properties.noChangelogLabel}`,
                 summary: 'the summary'
             };
         }
@@ -558,7 +576,7 @@ class Checks {
         if (Status_1.Status.OK === status) {
             return Conclusion.SUCCESS;
         }
-        else if (Status_1.Status.SKIP_BY_LABEL) {
+        else if (Status_1.Status.SKIP_BY_LABEL === status) {
             return Conclusion.NEUTRAL;
         }
         return Conclusion.FAILURE;
@@ -1951,28 +1969,6 @@ module.exports = opts => {
 
 /***/ }),
 
-/***/ 188:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const github = __importStar(__webpack_require__(469));
-function getOctokit(config) {
-    return new github.GitHub(config.githubToken);
-}
-exports.getOctokit = getOctokit;
-
-
-/***/ }),
-
 /***/ 190:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -2052,6 +2048,56 @@ function authenticationPlugin(octokit, options) {
   octokit.hook.before("request", beforeRequest.bind(null, state));
   octokit.hook.error("request", requestError.bind(null, state));
 }
+
+
+/***/ }),
+
+/***/ 194:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+class PrService {
+    constructor(_octokit, _properties, _actionContext) {
+        this._octokit = _octokit;
+        this._properties = _properties;
+        this._actionContext = _actionContext;
+    }
+    findFile(prNumber) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const regex = new RegExp(this._properties.fileName);
+            const files = yield this._octokit.pulls.listFiles(Object.assign(Object.assign({}, this._actionContext.repo), { pull_number: prNumber // eslint-disable-line @typescript-eslint/camelcase
+             }));
+            return files.data.find(value => regex.test(value.filename));
+        });
+    }
+    getCurrentPrLabels() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const pr = this.getPr();
+            return Promise.all(pr.labels.map((it) => __awaiter(this, void 0, void 0, function* () { return it.name; }))); // eslint-disable-line @typescript-eslint/no-explicit-any
+        });
+    }
+    getPr() {
+        const pr = this._actionContext.payload.pull_request;
+        if (pr) {
+            return pr;
+        }
+        else {
+            throw new Error('Not a PR');
+        }
+    }
+}
+exports.PrService = PrService;
 
 
 /***/ }),
@@ -7457,57 +7503,6 @@ function authenticationBeforeRequest(state, options) {
 
 /***/ }),
 
-/***/ 478:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core = __importStar(__webpack_require__(470));
-class Config {
-    constructor(githubToken, fileName, noChangelogLabel) {
-        this.githubToken = githubToken;
-        this.fileName = fileName;
-        this.noChangelogLabel = noChangelogLabel;
-    }
-}
-exports.Config = Config;
-function readConfig() {
-    const token = readGithubToken();
-    const name = readFileName();
-    const noChangelogLabel = readNoChangelogLabel();
-    return new Config(token, name, noChangelogLabel);
-}
-exports.readConfig = readConfig;
-function readGithubToken() {
-    const token = process.env.GITHUB_TOKEN;
-    if (!token)
-        throw ReferenceError('Github token required, add "env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"');
-    return token;
-}
-function readFileName() {
-    const fileName = core.getInput('fileName');
-    if (!fileName)
-        throw ReferenceError('Changelog fileName required"');
-    return fileName;
-}
-function readNoChangelogLabel() {
-    const label = core.getInput('noChangelogLabel');
-    if (!label)
-        throw ReferenceError('Changelog label required"');
-    return label;
-}
-
-
-/***/ }),
-
 /***/ 489:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -8443,51 +8438,6 @@ function getPageLinks (link) {
 
 /***/ }),
 
-/***/ 600:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-function findFile(octokit, actionContext, prNumber, config) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const regex = new RegExp(config.fileName);
-        const files = yield octokit.pulls.listFiles(Object.assign(Object.assign({}, actionContext.repo), { pull_number: prNumber // eslint-disable-line @typescript-eslint/camelcase
-         }));
-        return files.data.find(value => regex.test(value.filename));
-    });
-}
-exports.findFile = findFile;
-function getCurrentPrLabels(actionContext) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const pr = getPr(actionContext);
-        return Promise.all(pr.labels.map((it) => __awaiter(this, void 0, void 0, function* () { return it.name; }))); // eslint-disable-line @typescript-eslint/no-explicit-any
-    });
-}
-exports.getCurrentPrLabels = getCurrentPrLabels;
-function getPr(actionContext) {
-    const pr = actionContext.payload.pull_request;
-    if (pr) {
-        return pr;
-    }
-    else {
-        throw new Error('Not a PR');
-    }
-}
-exports.getPr = getPr;
-
-
-/***/ }),
-
 /***/ 605:
 /***/ (function(module) {
 
@@ -8641,6 +8591,28 @@ if (process.platform === 'linux') {
 /***/ (function(module) {
 
 module.exports = require("util");
+
+/***/ }),
+
+/***/ 670:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const github = __importStar(__webpack_require__(469));
+function getOctokit(properties) {
+    return new github.GitHub(properties.githubToken);
+}
+exports.getOctokit = getOctokit;
+
 
 /***/ }),
 
@@ -9137,37 +9109,38 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_1 = __webpack_require__(478);
 const github = __importStar(__webpack_require__(469));
-const octokitProvider_1 = __webpack_require__(188);
-const prService_1 = __webpack_require__(600);
+const OctokitProvider_1 = __webpack_require__(670);
 const Status_1 = __webpack_require__(249);
 const core = __importStar(__webpack_require__(470));
 const Checks_1 = __webpack_require__(110);
+const PrService_1 = __webpack_require__(194);
+const PropertiesService_1 = __webpack_require__(832);
 class ChangelogChecker {
     constructor() {
-        this._config = config_1.readConfig();
-        this._octokit = octokitProvider_1.getOctokit(this._config);
-        this._checks = new Checks_1.Checks(this._octokit, this._config);
+        this._properties = new PropertiesService_1.PropertiesService().properties();
+        this._octokit = OctokitProvider_1.getOctokit(this._properties);
+        this._checks = new Checks_1.Checks(this._octokit, this._properties);
+        const actionContext = github.context;
+        this._prService = new PrService_1.PrService(this._octokit, this._properties, actionContext);
     }
     checkChangelog() {
         return __awaiter(this, void 0, void 0, function* () {
-            const actionContext = github.context;
-            const labels = yield prService_1.getCurrentPrLabels(actionContext);
-            const pr = prService_1.getPr(actionContext);
-            if (labels.includes(this._config.noChangelogLabel)) {
-                core.info(`Ignore chagelog by label ${this._config.noChangelogLabel}`);
+            const labels = yield this._prService.getCurrentPrLabels();
+            const pr = this._prService.getPr();
+            if (labels.includes(this._properties.noChangelogLabel)) {
+                core.info(`Ignore chagelog by label ${this._properties.noChangelogLabel}`);
                 this._checks.createStatus(pr, Status_1.Status.SKIP_BY_LABEL);
             }
             else {
-                const result = yield this.checkChangelogExist(actionContext, pr, this._config);
+                const result = yield this.checkChangelogExist(pr);
                 this._checks.createStatus(pr, result);
             }
         });
     }
-    checkChangelogExist(actionContext, pr, config) {
+    checkChangelogExist(pr) {
         return __awaiter(this, void 0, void 0, function* () {
-            const changlelogFiles = yield prService_1.findFile(this._octokit, actionContext, pr.number, config);
+            const changlelogFiles = yield this._prService.findFile(pr.number);
             if (!changlelogFiles) {
                 return Status_1.Status.NO_CHANGELOG_UPDATE;
             }
@@ -9464,6 +9437,55 @@ function isexe (path, options, cb) {
 function sync (path, options) {
   return checkStat(fs.statSync(path), path, options)
 }
+
+
+/***/ }),
+
+/***/ 832:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core = __importStar(__webpack_require__(470));
+const Properties_1 = __webpack_require__(100);
+class PropertiesService {
+    constructor() {
+        const token = this.readGithubToken();
+        const name = this.readFileName();
+        const noChangelogLabel = this.readNoChangelogLabel();
+        this._properties = new Properties_1.Properties(token, name, noChangelogLabel);
+    }
+    properties() {
+        return this._properties;
+    }
+    readGithubToken() {
+        const token = process.env.GITHUB_TOKEN;
+        if (!token)
+            throw ReferenceError('Github token required, add "env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"');
+        return token;
+    }
+    readFileName() {
+        const fileName = core.getInput('fileName');
+        if (!fileName)
+            throw ReferenceError('Changelog fileName required"');
+        return fileName;
+    }
+    readNoChangelogLabel() {
+        const label = core.getInput('noChangelogLabel');
+        if (!label)
+            throw ReferenceError('Changelog label required"');
+        return label;
+    }
+}
+exports.PropertiesService = PropertiesService;
 
 
 /***/ }),

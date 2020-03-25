@@ -39,9 +39,12 @@
     "eslint-plugin-jest": "^23.8.2",
     "jest": "^25.1.0",
     "jest-circus": "^25.1.0",
+    "jest-ts-auto-mock": "^1.0.11",
     "js-yaml": "^3.13.1",
     "prettier": "^2.0.0",
+    "ts-auto-mock": "^1.5.7",
     "ts-jest": "^25.2.1",
-    "typescript": "^3.6.4"
+    "ttypescript": "^1.5.10",
+    "typescript": "^3.8.3"
   }
 }
