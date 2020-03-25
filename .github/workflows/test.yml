@@ -1,7 +1,7 @@
 name: "build-test"
 on: # rebuild any PRs and main branch changes
   pull_request:
-  label:
+    types: [assigned, opened, synchronize, reopened, labeled, unlabeled]
   push:
     branches:
       - master

@@ -7,5 +7,13 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest'
   },
-  verbose: true
+  verbose: true,
+  globals: {
+    'ts-jest': {
+      'compiler': 'ttypescript'
+    }
+  },
+  setupFiles: [
+    '<rootDir>config.ts'
+  ]
 }

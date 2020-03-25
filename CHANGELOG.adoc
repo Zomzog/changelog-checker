@@ -1,3 +1,7 @@
+=== 1.0.0
+
+Change check for an external check for label issues
+
 === 0.7.0
 
 Upgrade dependencies
