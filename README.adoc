@@ -1,4 +1,4 @@
-image:https://github.com/Zomzog/changelog-checker/workflows/build-test/badge.svg["build-test"]
+image:https://github.com/Zomzog/changelog-checker/workflows/build/badge.svg["build"]
 image:https://david-dm.org/Zomzog/changelog-checker.svg["david"]
 image:https://snyk.io/test/github/Zomzog/changelog-checker/badge.svg?targetFile=package.json["Known Vulnerabilities", link="https://snyk.io/test/github/Zomzog/changelog-checker?targetFile=package.json"]
 
