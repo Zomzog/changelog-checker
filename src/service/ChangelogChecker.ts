@@ -30,7 +30,9 @@ export class ChangelogChecker {
     const labels = await this._prService.getCurrentPrLabels()
     const pr = this._prService.getPr()
     if (labels.includes(this._properties.noChangelogLabel)) {
-      core.info(`Ignore chagelog by label ${this._properties.noChangelogLabel}`)
+      core.info(
+        `Ignore changelog by label ${this._properties.noChangelogLabel}`
+      )
       this._checks.createStatus(pr, Status.SKIP_BY_LABEL)
     } else {
       const result = await this.checkChangelogExist(pr)
