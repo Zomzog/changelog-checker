@@ -1,3 +1,7 @@
+=== Next release
+
+Upgrade dependencies
+
 === 1.0.0
 
 Change check for an external check for label issues
