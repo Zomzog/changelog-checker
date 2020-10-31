@@ -1,8 +1,11 @@
-=== Next release
+=== 1.2.0
+
+Upgrade dependencies
+Change master to main in description and fix the version.
 
 === 1.1.0
 
-Upgrade dependencies
+Upgrade dependencies for CVE
 
 === 1.0.0
 
