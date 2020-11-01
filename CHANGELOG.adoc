@@ -1,6 +1,6 @@
 === 1.2.0
 
-Upgrade dependencies
+Global upgrade of dependencies (github action, eslint, typescript...)
 Change master to main in description and fix the version.
 
 === 1.1.0
