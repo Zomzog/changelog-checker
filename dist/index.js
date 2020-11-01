@@ -236,7 +236,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -252,16 +252,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Conclusion = exports.Checks = void 0;
 const Status_1 = __webpack_require__(249);
-const github = __importStar(__webpack_require__(469));
 const core = __importStar(__webpack_require__(470));
 class Checks {
-    constructor(_octokit, _properties) {
-        this._octokit = _octokit;
+    constructor(_github, _properties) {
+        this._github = _github;
         this._properties = _properties;
     }
     createStatus(pullRequest, status) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { owner, repo } = github.context.repo;
+            const { owner, repo } = this._github.context.repo;
             const headSha = pullRequest.head.sha;
             const output = this.getOutput(status);
             const conclusion = this.getConclusion(status);
@@ -273,7 +272,7 @@ class Checks {
                 name: 'Changelog check',
                 output
             };
-            const check = yield this._octokit.checks.create(params);
+            const check = yield this._github.checks.create(params);
             core.info(JSON.stringify(check));
         });
     }
@@ -654,16 +653,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrService = void 0;
 class PrService {
-    constructor(_octokit, _properties, _actionContext) {
-        this._octokit = _octokit;
+    constructor(_github, _properties, _actionContext) {
+        this._github = _github;
         this._properties = _properties;
         this._actionContext = _actionContext;
     }
     findFile(prNumber) {
         return __awaiter(this, void 0, void 0, function* () {
             const regex = new RegExp(this._properties.fileName);
-            const files = yield this._octokit.pulls.listFiles(Object.assign(Object.assign({}, this._actionContext.repo), { pull_number: prNumber // eslint-disable-line @typescript-eslint/camelcase
-             }));
+            const files = yield this._github.pulls.listFiles(Object.assign(Object.assign({}, this._actionContext.repo), { pull_number: prNumber }));
             return files.data.find(value => regex.test(value.filename));
         });
     }
@@ -708,7 +706,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -4511,30 +4509,11 @@ module.exports = require("util");
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOctokit = void 0;
-const github = __importStar(__webpack_require__(469));
+const github_1 = __webpack_require__(469);
 function getOctokit(properties) {
-    return new github.GitHub(properties.githubToken);
+    return github_1.getOctokit(properties.githubToken);
 }
 exports.getOctokit = getOctokit;
 
@@ -4759,7 +4738,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -4775,19 +4754,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChangelogChecker = void 0;
 const github = __importStar(__webpack_require__(469));
-const OctokitProvider_1 = __webpack_require__(670);
-const Status_1 = __webpack_require__(249);
 const core = __importStar(__webpack_require__(470));
+const OctokitProvider_1 = __webpack_require__(670);
 const Checks_1 = __webpack_require__(110);
 const PrService_1 = __webpack_require__(194);
 const PropertiesService_1 = __webpack_require__(832);
+const Status_1 = __webpack_require__(249);
 class ChangelogChecker {
     constructor() {
         this._properties = new PropertiesService_1.PropertiesService().properties();
-        this._octokit = OctokitProvider_1.getOctokit(this._properties);
-        this._checks = new Checks_1.Checks(this._octokit, this._properties);
+        this._github = OctokitProvider_1.getOctokit(this._properties);
+        this._checks = new Checks_1.Checks(this._github, this._properties);
         const actionContext = github.context;
-        this._prService = new PrService_1.PrService(this._octokit, this._properties, actionContext);
+        this._prService = new PrService_1.PrService(this._github, this._properties, actionContext);
     }
     checkChangelog() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -4928,7 +4907,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };

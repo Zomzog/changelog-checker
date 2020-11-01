@@ -1,9 +1,12 @@
 import {Status} from '../domain/Status'
 import {Properties} from '../domain/Properties'
-import {GitHub} from '@actions/github/lib/utils' 
+import {GitHub} from '@actions/github/lib/utils'
 import {WebhookPayload} from '@actions/github/lib/interfaces'
 import * as core from '@actions/core'
-import { ChecksCreateParams, ChecksCreateParamsOutput } from '../domain/OctokitTypes'
+import {
+  ChecksCreateParams,
+  ChecksCreateParamsOutput
+} from '../domain/OctokitTypes'
 
 export class Checks {
   constructor(
@@ -25,7 +28,7 @@ export class Checks {
       owner,
       repo,
       conclusion,
-      head_sha: headSha, // eslint-disable-line @typescript-eslint/camelcase
+      head_sha: headSha,
       name: 'Changelog check',
       output
     }
@@ -34,9 +37,7 @@ export class Checks {
     core.info(JSON.stringify(check))
   }
 
-  private getOutput(
-    status: Status
-  ): ChecksCreateParamsOutput | undefined {
+  private getOutput(status: Status): ChecksCreateParamsOutput | undefined {
     if (Status.NO_CHANGELOG_UPDATE === status) {
       return {
         title: `${this._properties.fileName} must be updated`,

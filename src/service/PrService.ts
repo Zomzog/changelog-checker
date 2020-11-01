@@ -1,9 +1,8 @@
-
-import {GitHub} from '@actions/github/lib/utils' 
+import {GitHub} from '@actions/github/lib/utils'
 import {Context} from '@actions/github/lib/context'
 import {WebhookPayload} from '@actions/github/lib/interfaces'
 import {Properties} from '../domain/Properties'
-import type { PullsListFilesResponseDataElement } from "../domain/OctokitTypes";
+import type {PullsListFilesResponseDataElement} from '../domain/OctokitTypes'
 
 export class PrService {
   constructor(
@@ -18,7 +17,7 @@ export class PrService {
     const regex = new RegExp(this._properties.fileName)
     const files = await this._github.pulls.listFiles({
       ...this._actionContext.repo,
-      pull_number: prNumber // eslint-disable-line @typescript-eslint/camelcase
+      pull_number: prNumber
     })
     return files.data.find(value => regex.test(value.filename))
   }

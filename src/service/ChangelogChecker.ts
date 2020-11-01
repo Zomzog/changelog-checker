@@ -1,5 +1,5 @@
-import * as github from '@actions/github';
-import {GitHub} from '@actions/github/lib/utils' 
+import * as github from '@actions/github'
+import {GitHub} from '@actions/github/lib/utils'
 import {WebhookPayload} from '@actions/github/lib/interfaces'
 import * as core from '@actions/core'
 import {getOctokit} from './OctokitProvider'
