@@ -1,8 +1,8 @@
 import {PR} from '../data.test'
+import {GitHub} from '@actions/github/lib/utils'
 import {Context} from '@actions/github/lib/context'
 import { PrService } from "../../src/service/PrService";
 import { createMock } from "ts-auto-mock";
-import * as github from '@actions/github'
 import { Properties } from '../../src/domain/Properties';
 
 
@@ -22,7 +22,7 @@ describe('PrService', () => {
       ]
     }
   }
-  let octokitMock= createMock<github.GitHub>()
+  let octokitMock= createMock<InstanceType<typeof GitHub>>()
   let propertiesMock= createMock<Properties>()
 
   const service = new PrService(octokitMock, propertiesMock, context)

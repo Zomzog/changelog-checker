@@ -1,13 +1,16 @@
 import {Status} from '../domain/Status'
 import {Properties} from '../domain/Properties'
-import {Octokit} from '@octokit/rest'
-import * as github from '@actions/github'
+import {GitHub} from '@actions/github/lib/utils'
 import {WebhookPayload} from '@actions/github/lib/interfaces'
 import * as core from '@actions/core'
+import {
+  ChecksCreateParams,
+  ChecksCreateParamsOutput
+} from '../domain/OctokitTypes'
 
 export class Checks {
   constructor(
-    private _octokit: github.GitHub,
+    private _github: InstanceType<typeof GitHub>,
     private _properties: Properties
   ) {}
 
@@ -15,28 +18,26 @@ export class Checks {
     pullRequest: WebhookPayload,
     status: Status
   ): Promise<void> {
-    const {owner, repo} = github.context.repo
+    const {owner, repo} = this._github.context.repo
     const headSha = pullRequest.head.sha
 
     const output = this.getOutput(status)
     const conclusion = this.getConclusion(status)
 
-    const params: Octokit.ChecksCreateParams = {
+    const params: ChecksCreateParams = {
       owner,
       repo,
       conclusion,
-      head_sha: headSha, // eslint-disable-line @typescript-eslint/camelcase
+      head_sha: headSha,
       name: 'Changelog check',
       output
     }
 
-    const check = await this._octokit.checks.create(params)
+    const check = await this._github.checks.create(params)
     core.info(JSON.stringify(check))
   }
 
-  private getOutput(
-    status: Status
-  ): Octokit.ChecksCreateParamsOutput | undefined {
+  private getOutput(status: Status): ChecksCreateParamsOutput | undefined {
     if (Status.NO_CHANGELOG_UPDATE === status) {
       return {
         title: `${this._properties.fileName} must be updated`,

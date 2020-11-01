@@ -18,7 +18,7 @@ on:
   pull_request:
     types: [assigned, opened, synchronize, reopened, labeled, unlabeled]
     branches:
-      - master
+      - main
       - develop
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Changelog check
-        uses: Zomzog/changelog-checker@v1.0.0
+        uses: Zomzog/changelog-checker@v1.2.0
         with:
           fileName: myChangelog.adoc # default `CHANGELOG.adoc`
           noChangelogLabel: my custom label # default `no changelog`

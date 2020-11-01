@@ -1,26 +1,27 @@
 import * as github from '@actions/github'
+import {GitHub} from '@actions/github/lib/utils'
 import {WebhookPayload} from '@actions/github/lib/interfaces'
-import {getOctokit} from './OctokitProvider'
-import {Status} from '../domain/Status'
 import * as core from '@actions/core'
+import {getOctokit} from './OctokitProvider'
 import {Checks} from './Checks'
 import {PrService} from './PrService'
-import {Properties} from '../domain/Properties'
 import {PropertiesService} from './PropertiesService'
+import {Properties} from '../domain/Properties'
+import {Status} from '../domain/Status'
 
 export class ChangelogChecker {
   private _properties: Properties
-  private _octokit: github.GitHub
+  private _github: InstanceType<typeof GitHub>
   private _checks: Checks
   private _prService: PrService
 
   constructor() {
     this._properties = new PropertiesService().properties()
-    this._octokit = getOctokit(this._properties)
-    this._checks = new Checks(this._octokit, this._properties)
+    this._github = getOctokit(this._properties)
+    this._checks = new Checks(this._github, this._properties)
     const actionContext = github.context
     this._prService = new PrService(
-      this._octokit,
+      this._github,
       this._properties,
       actionContext
     )
