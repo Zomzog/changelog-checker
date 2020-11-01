@@ -1,21 +1,22 @@
-import * as github from '@actions/github'
+
+import {GitHub} from '@actions/github/lib/utils' 
 import {Context} from '@actions/github/lib/context'
-import {Octokit} from '@octokit/rest'
 import {WebhookPayload} from '@actions/github/lib/interfaces'
 import {Properties} from '../domain/Properties'
+import type { PullsListFilesResponseDataElement } from "../domain/OctokitTypes";
 
 export class PrService {
   constructor(
-    private _octokit: github.GitHub,
+    private _github: InstanceType<typeof GitHub>,
     private _properties: Properties,
     private _actionContext: Context
   ) {}
 
   async findFile(
     prNumber: number
-  ): Promise<Octokit.PullsListFilesResponseItem | undefined> {
+  ): Promise<PullsListFilesResponseDataElement | undefined> {
     const regex = new RegExp(this._properties.fileName)
-    const files = await this._octokit.pulls.listFiles({
+    const files = await this._github.pulls.listFiles({
       ...this._actionContext.repo,
       pull_number: prNumber // eslint-disable-line @typescript-eslint/camelcase
     })

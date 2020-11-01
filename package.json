@@ -27,7 +27,9 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "@actions/github": "^4.0.0"
+    "@actions/github": "^4.0.0",
+    "@octokit/rest": "^18.0.7",
+    "@octokit/webhooks": "^7.15.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
