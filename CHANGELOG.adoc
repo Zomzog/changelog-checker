@@ -2,6 +2,7 @@
 
 Global upgrade of dependencies (github action, eslint, typescript...)
 Change master to main in description and fix the version.
+Fix context issue
 
 === 1.1.0
 
