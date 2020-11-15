@@ -254,13 +254,14 @@ exports.Conclusion = exports.Checks = void 0;
 const Status_1 = __webpack_require__(249);
 const core = __importStar(__webpack_require__(470));
 class Checks {
-    constructor(_github, _properties) {
+    constructor(_github, _properties, _context) {
         this._github = _github;
         this._properties = _properties;
+        this._context = _context;
     }
     createStatus(pullRequest, status) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { owner, repo } = this._github.context.repo;
+            const { owner, repo } = this._context.repo;
             const headSha = pullRequest.head.sha;
             const output = this.getOutput(status);
             const conclusion = this.getConclusion(status);
@@ -4510,12 +4511,16 @@ module.exports = require("util");
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOctokit = void 0;
+exports.getContext = exports.getOctokit = void 0;
 const github_1 = __webpack_require__(469);
 function getOctokit(properties) {
     return github_1.getOctokit(properties.githubToken);
 }
 exports.getOctokit = getOctokit;
+function getContext() {
+    return github_1.context;
+}
+exports.getContext = getContext;
 
 
 /***/ }),
@@ -4764,7 +4769,7 @@ class ChangelogChecker {
     constructor() {
         this._properties = new PropertiesService_1.PropertiesService().properties();
         this._github = OctokitProvider_1.getOctokit(this._properties);
-        this._checks = new Checks_1.Checks(this._github, this._properties);
+        this._checks = new Checks_1.Checks(this._github, this._properties, OctokitProvider_1.getContext());
         const actionContext = github.context;
         this._prService = new PrService_1.PrService(this._github, this._properties, actionContext);
     }
