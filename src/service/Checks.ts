@@ -7,18 +7,20 @@ import {
   ChecksCreateParams,
   ChecksCreateParamsOutput
 } from '../domain/OctokitTypes'
+import {Context} from '@actions/github/lib/context'
 
 export class Checks {
   constructor(
     private _github: InstanceType<typeof GitHub>,
-    private _properties: Properties
+    private _properties: Properties,
+    private _context: Context
   ) {}
 
   async createStatus(
     pullRequest: WebhookPayload,
     status: Status
   ): Promise<void> {
-    const {owner, repo} = this._github.context.repo
+    const {owner, repo} = this._context.repo
     const headSha = pullRequest.head.sha
 
     const output = this.getOutput(status)
