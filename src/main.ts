@@ -3,6 +3,7 @@ import {ChangelogChecker} from './service/ChangelogChecker'
 
 async function run(): Promise<void> {
   try {
+    core.debug('Init ChangelogChecker')
     const service = new ChangelogChecker()
     await service.checkChangelog()
   } catch (error) {

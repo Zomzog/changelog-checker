@@ -11,6 +11,9 @@ inputs:
   noChangelogLabel:
     description: 'Label to ignore changelog check'
     default: 'no changelog'
+  checksNotification:
+    description: 'Simple or Detailed'
+    default: 'Detailed'
 runs:
   using: 'node12'
   main: 'dist/index.js'
