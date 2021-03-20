@@ -1,4 +1,3 @@
-import {PR} from '../data.test'
 import {GitHub} from '@actions/github/lib/utils'
 import {Context} from '@actions/github/lib/context'
 import { PrService } from "../../src/service/PrService";
