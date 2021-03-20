@@ -2,7 +2,7 @@ import * as github from '@actions/github'
 import {GitHub} from '@actions/github/lib/utils'
 import {WebhookPayload} from '@actions/github/lib/interfaces'
 import * as core from '@actions/core'
-import {getOctokit} from './OctokitProvider'
+import {getContext, getOctokit} from './OctokitProvider'
 import {Checks} from './Checks'
 import {PrService} from './PrService'
 import {PropertiesService} from './PropertiesService'
@@ -18,7 +18,7 @@ export class ChangelogChecker {
   constructor() {
     this._properties = new PropertiesService().properties()
     this._github = getOctokit(this._properties)
-    this._checks = new Checks(this._github, this._properties)
+    this._checks = new Checks(this._github, this._properties, getContext())
     const actionContext = github.context
     this._prService = new PrService(
       this._github,

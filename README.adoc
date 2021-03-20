@@ -7,7 +7,17 @@ image:https://snyk.io/test/github/Zomzog/changelog-checker/badge.svg?targetFile=
 This action will check that the changelog file has been updated in the PR.
 It will add a check on the PR which can be required for blocking the merge.
 
+The changelog file name can be customized with `fileName` parameter.
+
 The check can be disabled for a PR with a label.
+This label can be customized with the `noChangelogLabel` parameter.
+
+The `checksNotification` allows switching between Simple and Detailed checks.
+The simple check is based on the default check of the action.
+The detailed check will create a second check with a more precise message,
+but it required write access so it does not work with forks.
+
+Detailed check fallback to simple for forks.
 
 === Usage:
 
@@ -27,10 +37,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Changelog check
-        uses: Zomzog/changelog-checker@v1.1.0
+        uses: Zomzog/changelog-checker@v1.2.0
         with:
           fileName: myChangelog.adoc # default `CHANGELOG.adoc`
           noChangelogLabel: my custom label # default `no changelog`
+          checksNotification: Simple # default `Detailed`
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ----

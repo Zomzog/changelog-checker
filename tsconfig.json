@@ -13,8 +13,5 @@
         "cacheBetweenTests": false
       }
     ]},
-  "exclude": ["node_modules", "**/*.test.ts"],
-  "include": [
-    "src"
-  ]
+  "exclude": ["node_modules", "**/*.test.ts"]
 }

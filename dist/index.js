@@ -34,7 +34,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(198);
+/******/ 		return __webpack_require__(51);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -98,6 +98,56 @@ eval("require")("encoding");
 
 /***/ }),
 
+/***/ 46:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PrService = void 0;
+class PrService {
+    constructor(_github, _properties, _actionContext) {
+        this._github = _github;
+        this._properties = _properties;
+        this._actionContext = _actionContext;
+    }
+    findFile(prNumber) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const regex = new RegExp(this._properties.fileName);
+            const files = yield this._github.pulls.listFiles(Object.assign(Object.assign({}, this._actionContext.repo), { pull_number: prNumber }));
+            return files.data.find(value => regex.test(value.filename));
+        });
+    }
+    getCurrentPrLabels() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const pr = this.getPr();
+            return Promise.all(pr.labels.map((it) => __awaiter(this, void 0, void 0, function* () { return it.name; }))); // eslint-disable-line @typescript-eslint/no-explicit-any
+        });
+    }
+    getPr() {
+        const pr = this._actionContext.payload.pull_request;
+        if (pr) {
+            return pr;
+        }
+        else {
+            throw new Error('Not a PR');
+        }
+    }
+}
+exports.PrService = PrService;
+
+
+/***/ }),
+
 /***/ 49:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -143,6 +193,59 @@ function onceStrict (fn) {
   f.called = false
   return f
 }
+
+
+/***/ }),
+
+/***/ 51:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core = __importStar(__webpack_require__(470));
+const ChangelogChecker_1 = __webpack_require__(661);
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            core.debug('Init ChangelogChecker');
+            const service = new ChangelogChecker_1.ChangelogChecker();
+            yield service.checkChangelog();
+        }
+        catch (error) {
+            core.setFailed(error.message);
+        }
+    });
+}
+run();
 
 
 /***/ }),
@@ -213,104 +316,6 @@ function issueCommand(command, message) {
 }
 exports.issueCommand = issueCommand;
 //# sourceMappingURL=file-command.js.map
-
-/***/ }),
-
-/***/ 110:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Conclusion = exports.Checks = void 0;
-const Status_1 = __webpack_require__(249);
-const core = __importStar(__webpack_require__(470));
-class Checks {
-    constructor(_github, _properties) {
-        this._github = _github;
-        this._properties = _properties;
-    }
-    createStatus(pullRequest, status) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { owner, repo } = this._github.context.repo;
-            const headSha = pullRequest.head.sha;
-            const output = this.getOutput(status);
-            const conclusion = this.getConclusion(status);
-            const params = {
-                owner,
-                repo,
-                conclusion,
-                head_sha: headSha,
-                name: 'Changelog check',
-                output
-            };
-            const check = yield this._github.checks.create(params);
-            core.info(JSON.stringify(check));
-        });
-    }
-    getOutput(status) {
-        if (Status_1.Status.NO_CHANGELOG_UPDATE === status) {
-            return {
-                title: `${this._properties.fileName} must be updated`,
-                summary: 'the summary'
-            };
-        }
-        else if (Status_1.Status.SKIP_BY_LABEL) {
-            return {
-                title: `Ignore chagelog by label ${this._properties.noChangelogLabel}`,
-                summary: 'the summary'
-            };
-        }
-    }
-    getConclusion(status) {
-        if (Status_1.Status.OK === status) {
-            return Conclusion.SUCCESS;
-        }
-        else if (Status_1.Status.SKIP_BY_LABEL === status) {
-            return Conclusion.NEUTRAL;
-        }
-        return Conclusion.FAILURE;
-    }
-}
-exports.Checks = Checks;
-var Conclusion;
-(function (Conclusion) {
-    Conclusion["SUCCESS"] = "success";
-    Conclusion["FAILURE"] = "failure";
-    Conclusion["NEUTRAL"] = "neutral";
-    Conclusion["CANCELLED"] = "cancelled";
-    Conclusion["TIMED_OUT"] = "timed_out";
-    Conclusion["ACTION_REQUIRED"] = "action_required";
-})(Conclusion = exports.Conclusion || (exports.Conclusion = {}));
-
 
 /***/ }),
 
@@ -636,57 +641,34 @@ exports.debug = debug; // for test
 
 /***/ }),
 
-/***/ 194:
-/***/ (function(__unusedmodule, exports) {
+/***/ 151:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrService = void 0;
-class PrService {
-    constructor(_github, _properties, _actionContext) {
-        this._github = _github;
-        this._properties = _properties;
-        this._actionContext = _actionContext;
-    }
-    findFile(prNumber) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const regex = new RegExp(this._properties.fileName);
-            const files = yield this._github.pulls.listFiles(Object.assign(Object.assign({}, this._actionContext.repo), { pull_number: prNumber }));
-            return files.data.find(value => regex.test(value.filename));
-        });
-    }
-    getCurrentPrLabels() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const pr = this.getPr();
-            return Promise.all(pr.labels.map((it) => __awaiter(this, void 0, void 0, function* () { return it.name; }))); // eslint-disable-line @typescript-eslint/no-explicit-any
-        });
-    }
-    getPr() {
-        const pr = this._actionContext.payload.pull_request;
-        if (pr) {
-            return pr;
-        }
-        else {
-            throw new Error('Not a PR');
-        }
-    }
+exports.getContext = exports.getOctokit = void 0;
+const github_1 = __webpack_require__(469);
+function getOctokit(properties) {
+    return github_1.getOctokit(properties.githubToken);
 }
-exports.PrService = PrService;
+exports.getOctokit = getOctokit;
+function getContext() {
+    return github_1.context;
+}
+exports.getContext = getContext;
 
 
 /***/ }),
 
-/***/ 198:
+/***/ 211:
+/***/ (function(module) {
+
+module.exports = require("https");
+
+/***/ }),
+
+/***/ 212:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -720,44 +702,102 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Conclusion = exports.Checks = void 0;
+const Status_1 = __webpack_require__(303);
+const Properties_1 = __webpack_require__(393);
 const core = __importStar(__webpack_require__(470));
-const ChangelogChecker_1 = __webpack_require__(788);
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const service = new ChangelogChecker_1.ChangelogChecker();
-            yield service.checkChangelog();
+class Checks {
+    constructor(_github, _properties, _context) {
+        this._github = _github;
+        this._properties = _properties;
+        this._context = _context;
+    }
+    createStatus(pullRequest, status) {
+        return __awaiter(this, void 0, void 0, function* () {
+            switch (this._properties.checkNotification) {
+                case Properties_1.CheckNotification.Detailed:
+                    this.detailedCheck(pullRequest, status);
+                    break;
+                case Properties_1.CheckNotification.Simple:
+                    this.simpleCheck(status);
+                    break;
+            }
+        });
+    }
+    detailedCheck(pullRequest, status) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { owner, repo } = this._context.repo;
+            const headSha = pullRequest.head.sha;
+            const output = this.getDetailedOutput(status);
+            const conclusion = this.getConclusion(status);
+            const params = {
+                owner,
+                repo,
+                conclusion,
+                head_sha: headSha,
+                name: 'Changelog check',
+                output
+            };
+            try {
+                const check = yield this._github.checks.create(params);
+                if (check.status > 299) {
+                    core.error(`Check creation failed with ${check.status}`);
+                    core.setFailed('Check creation failed');
+                }
+            }
+            catch (err) {
+                if (err && err.status === 403) {
+                    core.error(`With fork simpleCheck must be used, fallback to it`);
+                    this.simpleCheck(status);
+                }
+                else {
+                    core.error(`Unmanaged error ${JSON.stringify(err)}`);
+                    core.setFailed('Check creation failed');
+                }
+            }
+        });
+    }
+    simpleCheck(status) {
+        const conclusion = this.getConclusion(status);
+        if (Conclusion.FAILURE === conclusion) {
+            core.info(`${this._properties.fileName} must be updated`);
+            core.setFailed(`${this._properties.fileName} must be updated`);
         }
-        catch (error) {
-            core.setFailed(error.message);
+    }
+    getDetailedOutput(status) {
+        if (Status_1.Status.NO_CHANGELOG_UPDATE === status) {
+            return {
+                title: `${this._properties.fileName} must be updated`,
+                summary: 'the summary'
+            };
         }
-    });
+        else if (Status_1.Status.SKIP_BY_LABEL) {
+            return {
+                title: `Ignore chagelog by label ${this._properties.noChangelogLabel}`,
+                summary: 'the summary'
+            };
+        }
+    }
+    getConclusion(status) {
+        if (Status_1.Status.OK === status) {
+            return Conclusion.SUCCESS;
+        }
+        else if (Status_1.Status.SKIP_BY_LABEL === status) {
+            return Conclusion.NEUTRAL;
+        }
+        return Conclusion.FAILURE;
+    }
 }
-run();
-
-
-/***/ }),
-
-/***/ 211:
-/***/ (function(module) {
-
-module.exports = require("https");
-
-/***/ }),
-
-/***/ 249:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Status = void 0;
-var Status;
-(function (Status) {
-    Status[Status["OK"] = 0] = "OK";
-    Status[Status["NO_CHANGELOG_UPDATE"] = 1] = "NO_CHANGELOG_UPDATE";
-    Status[Status["SKIP_BY_LABEL"] = 2] = "SKIP_BY_LABEL";
-})(Status = exports.Status || (exports.Status = {}));
+exports.Checks = Checks;
+var Conclusion;
+(function (Conclusion) {
+    Conclusion["SUCCESS"] = "success";
+    Conclusion["FAILURE"] = "failure";
+    Conclusion["NEUTRAL"] = "neutral";
+    Conclusion["CANCELLED"] = "cancelled";
+    Conclusion["TIMED_OUT"] = "timed_out";
+    Conclusion["ACTION_REQUIRED"] = "action_required";
+})(Conclusion = exports.Conclusion || (exports.Conclusion = {}));
 
 
 /***/ }),
@@ -990,6 +1030,23 @@ paginateRest.VERSION = VERSION;
 exports.composePaginateRest = composePaginateRest;
 exports.paginateRest = paginateRest;
 //# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 303:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Status = void 0;
+var Status;
+(function (Status) {
+    Status[Status["OK"] = 0] = "OK";
+    Status[Status["NO_CHANGELOG_UPDATE"] = 1] = "NO_CHANGELOG_UPDATE";
+    Status[Status["SKIP_BY_LABEL"] = 2] = "SKIP_BY_LABEL";
+})(Status = exports.Status || (exports.Status = {}));
 
 
 /***/ }),
@@ -1445,21 +1502,27 @@ exports.endpoint = endpoint;
 
 /***/ }),
 
-/***/ 402:
+/***/ 393:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Properties = void 0;
+exports.CheckNotification = exports.Properties = void 0;
 class Properties {
-    constructor(githubToken, fileName, noChangelogLabel) {
+    constructor(githubToken, fileName, noChangelogLabel, checkNotification) {
         this.githubToken = githubToken;
         this.fileName = fileName;
         this.noChangelogLabel = noChangelogLabel;
+        this.checkNotification = checkNotification;
     }
 }
 exports.Properties = Properties;
+var CheckNotification;
+(function (CheckNotification) {
+    CheckNotification[CheckNotification["Simple"] = 0] = "Simple";
+    CheckNotification[CheckNotification["Detailed"] = 1] = "Detailed";
+})(CheckNotification = exports.CheckNotification || (exports.CheckNotification = {}));
 
 
 /***/ }),
@@ -4469,6 +4532,84 @@ exports.HttpClient = HttpClient;
 
 /***/ }),
 
+/***/ 574:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PropertiesService = void 0;
+const core = __importStar(__webpack_require__(470));
+const Properties_1 = __webpack_require__(393);
+class PropertiesService {
+    constructor() {
+        const token = this.readGithubToken();
+        const name = this.readFileName();
+        const noChangelogLabel = this.readNoChangelogLabel();
+        const checkType = this.readCheckType();
+        this._properties = new Properties_1.Properties(token, name, noChangelogLabel, checkType);
+    }
+    properties() {
+        return this._properties;
+    }
+    readGithubToken() {
+        core.debug('Read github token');
+        const token = process.env.GITHUB_TOKEN;
+        if (!token)
+            throw ReferenceError('Github token required, add "env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"');
+        return token;
+    }
+    readFileName() {
+        core.debug('Read filename');
+        const fileName = core.getInput('fileName');
+        if (!fileName)
+            throw ReferenceError('Changelog fileName required');
+        return fileName;
+    }
+    readNoChangelogLabel() {
+        const label = core.getInput('noChangelogLabel');
+        if (!label)
+            throw ReferenceError('Changelog label required');
+        return label;
+    }
+    readCheckType() {
+        const checkNotification = core.getInput('checkNotification');
+        if (!checkNotification) {
+            return Properties_1.CheckNotification.Detailed;
+        }
+        else {
+            if (checkNotification === 'Simple')
+                return Properties_1.CheckNotification.Simple;
+            if (checkNotification === 'Detailed')
+                return Properties_1.CheckNotification.Detailed;
+            throw ReferenceError('Check notification must be Simple or Detailed');
+        }
+    }
+}
+exports.PropertiesService = PropertiesService;
+
+
+/***/ }),
+
 /***/ 605:
 /***/ (function(module) {
 
@@ -4497,26 +4638,89 @@ module.exports = require("net");
 
 /***/ }),
 
-/***/ 669:
-/***/ (function(module) {
-
-module.exports = require("util");
-
-/***/ }),
-
-/***/ 670:
+/***/ 661:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOctokit = void 0;
-const github_1 = __webpack_require__(469);
-function getOctokit(properties) {
-    return github_1.getOctokit(properties.githubToken);
+exports.ChangelogChecker = void 0;
+const github = __importStar(__webpack_require__(469));
+const core = __importStar(__webpack_require__(470));
+const OctokitProvider_1 = __webpack_require__(151);
+const Checks_1 = __webpack_require__(212);
+const PrService_1 = __webpack_require__(46);
+const PropertiesService_1 = __webpack_require__(574);
+const Status_1 = __webpack_require__(303);
+class ChangelogChecker {
+    constructor() {
+        this._properties = new PropertiesService_1.PropertiesService().properties();
+        this._github = OctokitProvider_1.getOctokit(this._properties);
+        this._checks = new Checks_1.Checks(this._github, this._properties, OctokitProvider_1.getContext());
+        const actionContext = github.context;
+        this._prService = new PrService_1.PrService(this._github, this._properties, actionContext);
+    }
+    checkChangelog() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const labels = yield this._prService.getCurrentPrLabels();
+            const pr = this._prService.getPr();
+            if (labels.includes(this._properties.noChangelogLabel)) {
+                core.info(`Ignore changelog by label ${this._properties.noChangelogLabel}`);
+                this._checks.createStatus(pr, Status_1.Status.SKIP_BY_LABEL);
+            }
+            else {
+                const result = yield this.checkChangelogExist(pr);
+                this._checks.createStatus(pr, result);
+            }
+        });
+    }
+    checkChangelogExist(pr) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const changlelogFiles = yield this._prService.findFile(pr.number);
+            if (!changlelogFiles) {
+                return Status_1.Status.NO_CHANGELOG_UPDATE;
+            }
+            return Status_1.Status.OK;
+        });
+    }
 }
-exports.getOctokit = getOctokit;
+exports.ChangelogChecker = ChangelogChecker;
 
+
+/***/ }),
+
+/***/ 669:
+/***/ (function(module) {
+
+module.exports = require("util");
 
 /***/ }),
 
@@ -4718,85 +4922,6 @@ module.exports = require("zlib");
 
 /***/ }),
 
-/***/ 788:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChangelogChecker = void 0;
-const github = __importStar(__webpack_require__(469));
-const core = __importStar(__webpack_require__(470));
-const OctokitProvider_1 = __webpack_require__(670);
-const Checks_1 = __webpack_require__(110);
-const PrService_1 = __webpack_require__(194);
-const PropertiesService_1 = __webpack_require__(832);
-const Status_1 = __webpack_require__(249);
-class ChangelogChecker {
-    constructor() {
-        this._properties = new PropertiesService_1.PropertiesService().properties();
-        this._github = OctokitProvider_1.getOctokit(this._properties);
-        this._checks = new Checks_1.Checks(this._github, this._properties);
-        const actionContext = github.context;
-        this._prService = new PrService_1.PrService(this._github, this._properties, actionContext);
-    }
-    checkChangelog() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const labels = yield this._prService.getCurrentPrLabels();
-            const pr = this._prService.getPr();
-            if (labels.includes(this._properties.noChangelogLabel)) {
-                core.info(`Ignore changelog by label ${this._properties.noChangelogLabel}`);
-                this._checks.createStatus(pr, Status_1.Status.SKIP_BY_LABEL);
-            }
-            else {
-                const result = yield this.checkChangelogExist(pr);
-                this._checks.createStatus(pr, result);
-            }
-        });
-    }
-    checkChangelogExist(pr) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const changlelogFiles = yield this._prService.findFile(pr.number);
-            if (!changlelogFiles) {
-                return Status_1.Status.NO_CHANGELOG_UPDATE;
-            }
-            return Status_1.Status.OK;
-        });
-    }
-}
-exports.ChangelogChecker = ChangelogChecker;
-
-
-/***/ }),
-
 /***/ 794:
 /***/ (function(module) {
 
@@ -4883,68 +5008,6 @@ const createTokenAuth = function createTokenAuth(token) {
 
 exports.createTokenAuth = createTokenAuth;
 //# sourceMappingURL=index.js.map
-
-
-/***/ }),
-
-/***/ 832:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PropertiesService = void 0;
-const core = __importStar(__webpack_require__(470));
-const Properties_1 = __webpack_require__(402);
-class PropertiesService {
-    constructor() {
-        const token = this.readGithubToken();
-        const name = this.readFileName();
-        const noChangelogLabel = this.readNoChangelogLabel();
-        this._properties = new Properties_1.Properties(token, name, noChangelogLabel);
-    }
-    properties() {
-        return this._properties;
-    }
-    readGithubToken() {
-        const token = process.env.GITHUB_TOKEN;
-        if (!token)
-            throw ReferenceError('Github token required, add "env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"');
-        return token;
-    }
-    readFileName() {
-        const fileName = core.getInput('fileName');
-        if (!fileName)
-            throw ReferenceError('Changelog fileName required"');
-        return fileName;
-    }
-    readNoChangelogLabel() {
-        const label = core.getInput('noChangelogLabel');
-        if (!label)
-            throw ReferenceError('Changelog label required"');
-        return label;
-    }
-}
-exports.PropertiesService = PropertiesService;
 
 
 /***/ }),
