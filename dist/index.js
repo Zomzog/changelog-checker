@@ -773,7 +773,7 @@ class Checks {
         }
         else if (Status_1.Status.SKIP_BY_LABEL) {
             return {
-                title: `Ignore chagelog by label ${this._properties.noChangelogLabel}`,
+                title: `Ignore changelog by label ${this._properties.noChangelogLabel}`,
                 summary: 'the summary'
             };
         }

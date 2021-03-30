@@ -1,3 +1,7 @@
+=== Unreleased
+
+Fix typo in check name
+
 === 1.2.0
 
 Global upgrade of dependencies (github action, eslint, typescript...)
