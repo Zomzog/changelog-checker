@@ -1,6 +1,7 @@
 === Unreleased
 
 Fix typo in check name
+Fix typo in checkNotification
 
 === 1.2.0
 
