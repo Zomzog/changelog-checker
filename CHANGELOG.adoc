@@ -1,5 +1,7 @@
-=== Next Release
+=== Unreleased
 
+Fix typo in check name
+Fix typo in checkNotification
 Bump node-notifier from 8.0.0 to 8.0.1
 
 === 1.2.0
