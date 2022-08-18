@@ -26,7 +26,7 @@
   "author": "Zomzog",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.9.1",
     "@actions/github": "^4.0.0",
     "@octokit/rest": "^18.0.7",
     "@octokit/webhooks": "^7.15.1"
