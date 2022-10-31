@@ -3,12 +3,10 @@ test('YOLO', async () => {})
 export const PR = {
   _links: {
     comments: {
-      href:
-        'https://api.github.com/repos/Zomzog/changelog-checker/issues/7/comments'
+      href: 'https://api.github.com/repos/Zomzog/changelog-checker/issues/7/comments'
     },
     commits: {
-      href:
-        'https://api.github.com/repos/Zomzog/changelog-checker/pulls/7/commits'
+      href: 'https://api.github.com/repos/Zomzog/changelog-checker/pulls/7/commits'
     },
     html: {
       href: 'https://github.com/Zomzog/changelog-checker/pull/7'
@@ -17,19 +15,16 @@ export const PR = {
       href: 'https://api.github.com/repos/Zomzog/changelog-checker/issues/7'
     },
     review_comment: {
-      href:
-        'https://api.github.com/repos/Zomzog/changelog-checker/pulls/comments{/number}'
+      href: 'https://api.github.com/repos/Zomzog/changelog-checker/pulls/comments{/number}'
     },
     review_comments: {
-      href:
-        'https://api.github.com/repos/Zomzog/changelog-checker/pulls/7/comments'
+      href: 'https://api.github.com/repos/Zomzog/changelog-checker/pulls/7/comments'
     },
     self: {
       href: 'https://api.github.com/repos/Zomzog/changelog-checker/pulls/7'
     },
     statuses: {
-      href:
-        'https://api.github.com/repos/Zomzog/changelog-checker/statuses/1cda25a997fa99b4f213ee4eb754492d1970fb6f'
+      href: 'https://api.github.com/repos/Zomzog/changelog-checker/statuses/1cda25a997fa99b4f213ee4eb754492d1970fb6f'
     }
   },
   additions: 19,
@@ -384,8 +379,7 @@ export const PR = {
       id: 1898639909,
       name: 'good first issue',
       node_id: 'MDU6TGFiZWwxODk4NjM5OTA5',
-      url:
-        'https://api.github.com/repos/Zomzog/changelog-checker/labels/good%20first%20issue'
+      url: 'https://api.github.com/repos/Zomzog/changelog-checker/labels/good%20first%20issue'
     },
     {
       color: 'db3125',
@@ -394,8 +388,7 @@ export const PR = {
       id: 1916458860,
       name: 'no changelog',
       node_id: 'MDU6TGFiZWwxOTE2NDU4ODYw',
-      url:
-        'https://api.github.com/repos/Zomzog/changelog-checker/labels/no%20changelog'
+      url: 'https://api.github.com/repos/Zomzog/changelog-checker/labels/no%20changelog'
     }
   ],
   locked: false,
