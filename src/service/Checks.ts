@@ -7,6 +7,7 @@ import {
   ChecksCreateParams,
   ChecksCreateParamsOutput
 } from '../domain/OctokitTypes'
+import {RequestError} from '@octokit/request-error'
 import {Context} from '@actions/github/lib/context'
 
 export class Checks {
@@ -55,7 +56,7 @@ export class Checks {
         core.setFailed('Check creation failed')
       }
     } catch (err) {
-      if (err && err.status === 403) {
+      if (err instanceof RequestError && err.status === 403) {
         core.error(`With fork simpleCheck must be used, fallback to it`)
         this.simpleCheck(status)
       } else {
