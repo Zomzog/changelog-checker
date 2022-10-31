@@ -15,11 +15,19 @@ export class PrService {
     prNumber: number
   ): Promise<PullsListFilesResponseDataElement | undefined> {
     const regex = new RegExp(this._properties.fileName)
-    const files = await this._github.pulls.listFiles({
-      ...this._actionContext.repo,
-      pull_number: prNumber
-    })
-    return files.data.find(value => regex.test(value.filename))
+    for await (const files of this._github.paginate.iterator(
+      this._github.pulls.listFiles,
+      {
+        ...this._actionContext.repo,
+        pull_number: prNumber,
+        per_page: 100
+      }
+    )) {
+      if (files.data.find(value => regex.test(value.filename))) {
+        return files.data.find(value => regex.test(value.filename))
+      }
+    }
+    return undefined
   }
 
   async getCurrentPrLabels(): Promise<string[]> {
