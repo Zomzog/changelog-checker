@@ -213,6 +213,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrService = void 0;
 class PrService {
@@ -222,10 +229,25 @@ class PrService {
         this._actionContext = _actionContext;
     }
     findFile(prNumber) {
+        var e_1, _a;
         return __awaiter(this, void 0, void 0, function* () {
             const regex = new RegExp(this._properties.fileName);
-            const files = yield this._github.pulls.listFiles(Object.assign(Object.assign({}, this._actionContext.repo), { pull_number: prNumber }));
-            return files.data.find(value => regex.test(value.filename));
+            try {
+                for (var _b = __asyncValues(this._github.paginate.iterator(this._github.pulls.listFiles, Object.assign(Object.assign({}, this._actionContext.repo), { pull_number: prNumber, per_page: 100 }))), _c; _c = yield _b.next(), !_c.done;) {
+                    const files = _c.value;
+                    if (files.data.find(value => regex.test(value.filename))) {
+                        return files.data.find(value => regex.test(value.filename));
+                    }
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+            return undefined;
         });
     }
     getCurrentPrLabels() {
