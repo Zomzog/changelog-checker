@@ -7,7 +7,11 @@ async function run(): Promise<void> {
     const service = new ChangelogChecker()
     await service.checkChangelog()
   } catch (error) {
-    core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.setFailed(error.message)
+    } else {
+      core.setFailed('Unexpected error') // TODO print error
+    }
   }
 }
 

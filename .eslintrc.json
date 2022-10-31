@@ -7,7 +7,11 @@
       "sourceType": "module",
       "project": "./tsconfig.json"
     },
-    "rules": {      "eslint-comments/no-use": "off",
+    "rules": {      
+      "import/named": "warn",
+      "filenames/match-regex": "off",
+      "i18n-text/no-en": "off",
+      "eslint-comments/no-use": "off",
       "import/no-namespace": "off",
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "error",

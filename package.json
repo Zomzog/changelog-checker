@@ -26,27 +26,27 @@
   "author": "Zomzog",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.9.1",
     "@actions/github": "^4.0.0",
-    "@octokit/rest": "^18.0.7",
-    "@octokit/webhooks": "^7.15.1"
+    "@octokit/rest": "^18.12.0",
+    "@octokit/webhooks": "^7.24.3"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.15",
-    "@types/node": "^14.14.6",
-    "@typescript-eslint/parser": "^4.6.0",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^14.18.33",
+    "@typescript-eslint/parser": "^4.33.0",
     "@zeit/ncc": "^0.21.1",
-    "eslint": "^7.12.1",
-    "eslint-plugin-github": "^4.1.1",
-    "eslint-plugin-jest": "^24.1.0",
-    "jest": "^26.6.1",
-    "jest-circus": "^26.6.1",
-    "jest-ts-auto-mock": "^1.0.11",
-    "js-yaml": "^3.14.0",
-    "prettier": "^2.1.2",
-    "ts-auto-mock": "^2.6.5",
-    "ts-jest": "^26.4.3",
-    "ttypescript": "^1.5.12",
-    "typescript": "^4.0.5"
+    "eslint": "^7.32.0",
+    "eslint-plugin-github": "^4.4.0",
+    "eslint-plugin-jest": "^24.7.0",
+    "jest": "^26.6.3",
+    "jest-circus": "^26.6.3",
+    "jest-ts-auto-mock": "^1.0.12",
+    "js-yaml": "^3.14.1",
+    "prettier": "^2.7.1",
+    "ts-auto-mock": "^2.7.0",
+    "ts-jest": "^26.5.6",
+    "ttypescript": "^1.5.13",
+    "typescript": "^4.8.4"
   }
 }
