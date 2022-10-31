@@ -5,6 +5,7 @@ Fix typo in checkNotification
 Bump node-notifier from 8.0.0 to 8.0.1
 Bump y18n from 4.0.0 to 4.0.3
 Fix CVEs with global dependencies update
+Fetch all pages when looking for the changelog file
 
 === 1.2.0
 
