@@ -50,7 +50,7 @@ export class Checks {
       output
     }
     try {
-      const check = await this._github.checks.create(params)
+      const check = await this._github.rest.checks.create(params)
       if (check.status > 299) {
         core.error(`Check creation failed with ${check.status}`)
         core.setFailed('Check creation failed')

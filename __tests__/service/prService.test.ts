@@ -1,9 +1,9 @@
 import {GitHub} from '@actions/github/lib/utils'
 import {Context} from '@actions/github/lib/context'
 import { PrService } from "../../src/service/PrService";
-import { createMock } from "ts-auto-mock";
-import { Properties } from '../../src/domain/Properties';
+import { CheckNotification, Properties } from '../../src/domain/Properties';
 
+jest.mock('@actions/github/lib/utils')
 
 describe('PrService', () => {
 
@@ -21,8 +21,8 @@ describe('PrService', () => {
       ]
     }
   }
-  let octokitMock= createMock<InstanceType<typeof GitHub>>()
-  let propertiesMock= createMock<Properties>()
+  let octokitMock= new GitHub()
+  let propertiesMock= new Properties("","","",CheckNotification.Simple)
 
   const service = new PrService(octokitMock, propertiesMock, context)
 
