@@ -1,4 +1,5 @@
 === Unreleased
+Upgrade node version to node16
 
 Update dependencies and node version
 
