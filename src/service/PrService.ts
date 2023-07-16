@@ -2,7 +2,7 @@ import {GitHub} from '@actions/github/lib/utils'
 import {Context} from '@actions/github/lib/context'
 import {WebhookPayload} from '@actions/github/lib/interfaces'
 import {Properties} from '../domain/Properties'
-import type {PullsListFilesResponseDataElement} from '../domain/OctokitTypes'
+import type {PullsListFilesItem} from '../domain/OctokitTypes'
 
 export class PrService {
   constructor(
@@ -13,16 +13,17 @@ export class PrService {
 
   async findFile(
     prNumber: number
-  ): Promise<PullsListFilesResponseDataElement | undefined> {
+  ): Promise<PullsListFilesItem | undefined> {
     const regex = new RegExp(this._properties.fileName)
     for await (const files of this._github.paginate.iterator(
-      this._github.pulls.listFiles,
+      this._github.rest.pulls.listFiles,
       {
         ...this._actionContext.repo,
         pull_number: prNumber,
         per_page: 100
       }
     )) {
+      const pony = files.data
       if (files.data.find(value => regex.test(value.filename))) {
         return files.data.find(value => regex.test(value.filename))
       }
